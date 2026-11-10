@@ -1,0 +1,18 @@
+{
+ "profile": {
+  "info_cache": {
+   "Default": {
+    "name": "Your Chromium",
+    "is_using_default_name": true
+   },
+   "Profile 1": {
+    "name": "__ARC_SYSTEM_PROFILE",
+    "is_using_default_name": false
+   },
+   "Profile 2": {
+    "name": "Work",
+    "is_using_default_name": false
+   }
+  }
+ }
+}
