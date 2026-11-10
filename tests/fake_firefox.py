@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """A stand-in for the firefox binary, used by the tests.
 
-It does the parts of a real Firefox startup that arc-to-firefox relies on:
+It does the parts of a real Firefox startup that exit-arc relies on:
 reads <profile>/user.js, and if browser.places.importBookmarksHTML is true it
 REPLACES places.sqlite with the bookmarks from browser.bookmarks.file, records
 the prefs in prefs.js, holds a profile lock, then idles until it's told to quit.
@@ -22,7 +22,7 @@ ROOTS = [(1, 0, "root________", ""), (2, 1, "menu________", "menu"), (3, 1, "too
 
 
 def create_places(path):
-    """An empty places.sqlite with the columns arc-to-firefox reads."""
+    """An empty places.sqlite with the columns exit-arc reads."""
     if path.exists():
         path.unlink()
     db = sqlite3.connect(str(path))

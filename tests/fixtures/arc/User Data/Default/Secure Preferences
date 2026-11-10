@@ -1,0 +1,45 @@
+{
+ "extensions": {
+  "settings": {
+   "aeblfdkhhhdcdjpifhhbdiojplfjncoa": {
+    "location": 1,
+    "from_webstore": true,
+    "disable_reasons": []
+   },
+   "abcdefghijklmnopabcdefghijklmnop": {
+    "location": 1,
+    "from_webstore": true,
+    "disable_reasons": []
+   },
+   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+    "location": 1,
+    "from_webstore": true,
+    "disable_reasons": []
+   },
+   "cccccccccccccccccccccccccccccccc": {
+    "location": 1,
+    "from_webstore": true,
+    "disable_reasons": [
+     1
+    ]
+   },
+   "dddddddddddddddddddddddddddddddd": {
+    "location": 6,
+    "from_webstore": true,
+    "disable_reasons": []
+   },
+   "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee": {
+    "location": 5,
+    "from_webstore": false
+   },
+   "ffffffffffffffffffffffffffffffff": {
+    "location": 4,
+    "from_webstore": false,
+    "manifest": {
+     "name": "Unpacked Dev Tool",
+     "version": "0.1"
+    }
+   }
+  }
+ }
+}

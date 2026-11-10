@@ -3,9 +3,9 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "arc-to-firefox"
-version = "0.1.0"
-description = "Move Arc browser spaces, pinned tabs, folders and favourites into Firefox bookmarks."
+name = "exit-arc"
+version = "0.2.0"
+description = "Move your Arc browser spaces, pinned tabs, folders, favourites and extensions to Firefox, Zen or Chrome, or export them to plain files."
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.8"
@@ -17,7 +17,7 @@ classifiers = [
 ]
 
 [project.scripts]
-arc-to-firefox = "arc_to_firefox:main"
+exit-arc = "exit_arc.cli:main"
 
 [tool.setuptools]
-py-modules = ["arc_to_firefox"]
+packages = ["exit_arc"]
