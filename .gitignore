@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+build/
+dist/
+*.egg-info/
+.worktrees/
+# Never commit real exports
+arc-export.json
+arc-bookmarks.html
+firefox-bookmarks-backup-*/
