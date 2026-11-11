@@ -26,6 +26,7 @@ DESCRIPTIONS = {
     ("pin-favourites", "firefox"): "your Favourites as pinned tabs (Firefox will also reopen your last tabs)",
     ("pin-favourites", "zen"): "your Favourites as Zen Essentials",
     ("vertical-tabs", "firefox"): "tabs in a sidebar on the left, like Arc",
+    ("vertical-tabs", "chrome"): "tabs down the left side, like Arc (experimental)",
     ("clean-newtab", "firefox"): "no sponsored shortcuts, stories or widgets on new tabs",
     ("clean-newtab", "zen"): "no sponsored shortcuts, stories or widgets on new tabs",
     ("extensions", "firefox"): "look up your extensions on addons.mozilla.org (only their names are sent), "

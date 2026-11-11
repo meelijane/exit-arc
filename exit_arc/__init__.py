@@ -2,7 +2,7 @@
 favourites, extensions list) to Firefox, Zen or Chrome, or export it to plain
 files. Python 3.8+ standard library only."""
 
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 
 
 class ToolError(Exception):

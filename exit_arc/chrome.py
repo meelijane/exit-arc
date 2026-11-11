@@ -185,3 +185,27 @@ def add_bookmarks(profile, toolbar_nodes, menu_nodes, backup_dir=None, now=None)
 
 def webstore_urls(extensions):
     return [WEBSTORE_URL.format(id=e["id"]) for e in extensions if e.get("fromWebStore") and not e.get("preinstalled")]
+
+
+def enable_vertical_tabs(profile, backup_dir=None):
+    """Turn on Chrome's vertical tabs (the `vertical_tabs.enabled` setting) in a closed profile.
+
+    Returns True if it changed something, False if it was already on.
+    """
+    path = Path(profile) / "Preferences"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    except ValueError:
+        raise ToolError(f"Chrome's settings file {path} isn't valid JSON, so it was left alone.")
+    section = data.get("vertical_tabs")
+    if not isinstance(section, dict):
+        section = data["vertical_tabs"] = {}
+    if section.get("enabled") is True:
+        return False
+    if backup_dir and path.exists():
+        backup_file(path, backup_dir, "Preferences")
+    section["enabled"] = True
+    tmp = path.with_name("Preferences.exit-arc.tmp")
+    tmp.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    os.replace(tmp, path)
+    return True

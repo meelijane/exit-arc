@@ -118,9 +118,9 @@ class GuidedFinishTests(SandboxTest):
         self.assertNotIn("Default browser:", out)
 
     def test_default_browser_offered(self):
-        code, out = self.guided(["1", "3", "3", "", ""])  # Chrome: 1 Bookmarks, 2 Extensions, 3 Default browser
+        code, out = self.guided(["1", "3", "4", "", ""])  # Chrome: 1 Bookmarks, 2 Vertical tabs, 3 Extensions, 4 Default
         self.assertEqual(code, 0, out)
-        self.assertIn("3. Default browser: make Chrome your default browser", out)
+        self.assertIn("4. Default browser: make Chrome your default browser", out)
         self.assertEqual(self.system.default_requests, ["com.google.Chrome"])
 
     def test_remove_question_defaults_to_no(self):
@@ -141,6 +141,37 @@ class GuidedFinishTests(SandboxTest):
         code, out = self.guided(["1", "4", "", ""])
         self.assertEqual(code, 0, out)
         self.assertNotIn("remove Arc", out)
+
+
+
+class ChromeVerticalTabsTests(SandboxTest):
+    def test_turns_on_and_keeps_other_settings(self):
+        import json
+        p = self.profile("Chrome/Default")
+        (p / "Preferences").write_text(json.dumps({"vertical_tabs": {"uncollapsed_width": 240}, "other": 1}))
+        code, out = self.cli("--to", "chrome", "--vertical-tabs", "--browser-profile", str(p), answers=[True])
+        self.assertEqual(code, 0, out)
+        data = json.loads((p / "Preferences").read_text())
+        self.assertEqual(data["vertical_tabs"], {"uncollapsed_width": 240, "enabled": True})
+        self.assertEqual(data["other"], 1)
+        backup = next(self.out.glob("backup-chrome-*"))
+        self.assertNotIn("enabled", (backup / "Preferences").read_text())
+        self.assertIn("Vertical tabs: on (experimental)", out)
+
+    def test_already_on(self):
+        import json
+        p = self.profile("Chrome/Default")
+        (p / "Preferences").write_text(json.dumps({"vertical_tabs": {"enabled": True}}))
+        code, out = self.cli("--to", "chrome", "--vertical-tabs", "--browser-profile", str(p), answers=[True])
+        self.assertIn("Vertical tabs: already on.", out)
+
+    def test_bad_json_left_alone(self):
+        from exit_arc import ToolError
+        p = self.profile("Chrome/Default")
+        (p / "Preferences").write_text("{not json")
+        with self.assertRaises(ToolError):
+            self.cli("--to", "chrome", "--vertical-tabs", "--browser-profile", str(p), answers=[True])
+        self.assertEqual((p / "Preferences").read_text(), "{not json")
 
 
 if __name__ == "__main__":

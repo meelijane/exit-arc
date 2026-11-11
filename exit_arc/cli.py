@@ -32,7 +32,7 @@ CAPABILITIES = {
     "vertical-tabs": {
         "firefox": ("yes", "tabs in a sidebar on the left"),
         "zen": ("built in", "Zen already has vertical tabs"),
-        "chrome": ("no", "Chrome has vertical tabs, but exit-arc doesn't switch them on; turn them on in Chrome"),
+        "chrome": ("experimental", "turns on Chrome's vertical tabs"),
     },
     "clean-newtab": {
         "firefox": ("yes", "removes sponsored shortcuts, stories and widgets"),
@@ -404,6 +404,12 @@ def apply_profile_steps(args, export, target, profile, steps, html_text, html_pa
                 + (f" (replacing {replaced} items from an earlier exit-arc run)" if replaced else "") + ".")
             log("This is experimental. If they don't show up, import by hand: "
                 + MANUAL_IMPORT["chrome"].format(html=html_path or "arc-bookmarks.html"))
+        if "vertical-tabs" in steps:
+            if chrome.enable_vertical_tabs(profile, backups):
+                log("Vertical tabs: on (experimental). If Chrome still shows tabs along the top, turn vertical tabs "
+                    "on in Chrome itself.")
+            else:
+                log("Vertical tabs: already on.")
         return 0
 
     code = 0
