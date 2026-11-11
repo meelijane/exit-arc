@@ -17,7 +17,7 @@ files, and sends nothing anywhere unless you ask it to look up extensions.
 | **Bookmarks**: favourites + a folder per space | yes, on the toolbar (replaces existing bookmarks; asks first) | yes, same as Firefox | experimental: added to the bookmarks bar, yours kept | HTML, CSV, Markdown, JSON |
 | **Spaces** | no: you get a toolbar folder per space | **yes**: real Zen spaces with your pinned tabs and folders | no: Chrome has no spaces | listed in every format |
 | **Favourites** | real pinned tabs | **Zen Essentials** | no (Chrome's session files are undocumented) | listed in every format |
-| **Vertical tabs** | yes | built in | no | - |
+| **Vertical tabs** | yes | built in | not set up by exit-arc; turn it on in Chrome | - |
 | **New tab cleanup** | yes | yes | no | - |
 | **Extensions** | finds official add-ons; you approve each | same as Firefox | opens each Web Store page; you click Add | listed in Markdown and JSON |
 | **Default browser** | yes (macOS asks you to confirm) | yes | yes | - |
@@ -134,8 +134,9 @@ back unchanged. A future Zen version may change the format. If spaces don't appe
   *Bookmarks and Lists > Import Bookmarks and Settings > Bookmarks HTML File* with `arc-bookmarks.html`.
 - **Extensions**: opens each extension's Chrome Web Store page. Arc uses the same extension IDs as
   Chrome, so these are the exact same extensions.
-- No spaces, pinned tabs, vertical tabs or new tab cleanup: Chrome either doesn't have them or doesn't
-  let other programs set them.
+- Chrome has vertical tabs, but exit-arc doesn't switch them on yet: turn them on in Chrome itself.
+- No spaces, pinned tabs or new tab cleanup: Chrome either doesn't have them or doesn't let other
+  programs set them.
 
 ### Extensions
 

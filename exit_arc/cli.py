@@ -32,7 +32,7 @@ CAPABILITIES = {
     "vertical-tabs": {
         "firefox": ("yes", "tabs in a sidebar on the left"),
         "zen": ("built in", "Zen already has vertical tabs"),
-        "chrome": ("no", "not something Chrome lets other programs switch on"),
+        "chrome": ("no", "Chrome has vertical tabs, but exit-arc doesn't switch them on; turn them on in Chrome"),
     },
     "clean-newtab": {
         "firefox": ("yes", "removes sponsored shortcuts, stories and widgets"),
