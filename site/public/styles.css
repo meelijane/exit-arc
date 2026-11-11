@@ -20,8 +20,6 @@
   --code-ink: #ffe4e6;
   --warn-bg: #ffecee;
   --warn-line: var(--coral);
-  --glow-a: rgba(255, 83, 106, 0.16);
-  --glow-b: rgba(0, 45, 200, 0.10);
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
 }
@@ -39,8 +37,6 @@
     --code-bg: #07051a;
     --code-ink: #ffd9dc;
     --warn-bg: #2b1233;
-    --glow-a: rgba(255, 83, 106, 0.20);
-    --glow-b: rgba(0, 45, 200, 0.28);
   }
 }
 
@@ -91,12 +87,7 @@ a:hover { text-decoration-thickness: 2px; }
 }
 
 /* Hero */
-.hero {
-  padding: 4rem 0 2.5rem;
-  background:
-    radial-gradient(40rem 22rem at 88% -10%, var(--glow-a), transparent 70%),
-    radial-gradient(36rem 20rem at 0% 110%, var(--glow-b), transparent 70%);
-}
+.hero { padding: 4rem 0 2.5rem; }
 
 .sign {
   display: inline-flex;
