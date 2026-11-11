@@ -378,7 +378,7 @@ details .output { border: 0; border-top: 1px solid var(--line); border-radius: 0
 
 /* Capability table */
 .table-scroll { margin: 0; position: relative; }
-table { min-width: 44rem; font-size: 0.95rem; }
+table { font-size: 0.95rem; }
 tbody th {
   text-align: left;
   font-size: 1rem;
@@ -408,3 +408,30 @@ tbody th code { display: inline-block; margin-top: 0.2rem; font-size: 0.8rem; fo
 .footer .source { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.75rem; margin-bottom: 0.75rem; }
 .footer .source a { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600; }
 .footer .source svg { width: 1.25em; height: 1.25em; flex: none; }
+
+/* Table: no sideways scroll. Fits on wide screens, stacks into cards on narrow ones. */
+.table-scroll { overflow: visible; }
+th, td { overflow-wrap: break-word; }
+@media (max-width: 40rem) {
+  .table-scroll { border: 0; background: none; }
+  .table-scroll table, .table-scroll tbody, .table-scroll tr, .table-scroll th, .table-scroll td { display: block; width: auto; }
+  .table-scroll thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .table-scroll tbody tr {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
+    margin-bottom: 0.75rem;
+    padding: 0.4rem 0;
+  }
+  .table-scroll tbody th { padding-bottom: 0.25rem; }
+  .table-scroll td { position: relative; padding: 0.35rem 0.9rem 0.35rem 7.6rem; }
+  .table-scroll td::before { content: attr(data-label); position: absolute; left: 0.9rem; top: 0.5rem; width: 6.2rem; font-size: 0.75rem; line-height: 1.3; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+}
+
+.tagline {
+  font-size: clamp(1.15rem, 3.4vw, 1.35rem);
+  line-height: 1.4;
+  margin: -0.5rem 0 1.5rem;
+  max-width: 34rem;
+}
+.tagline strong { color: var(--accent); }
