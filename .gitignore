@@ -8,3 +8,7 @@ dist/
 arc-export.json
 arc-bookmarks.html
 firefox-bookmarks-backup-*/
+arc-tabs.csv
+arc-sidebar.md
+backup-*/
+.DS_Store

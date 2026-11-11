@@ -1,0 +1,26 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+        python: ["3.9", "3.13"]
+        exclude:
+          # Ubuntu 26.04 (ubuntu-latest) has no Python 3.9 build. 3.9 is still tested on macOS,
+          # where it's the system python3 the Homebrew cask runs with.
+          - os: ubuntu-latest
+            python: "3.9"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: make test
+      - run: make pyz && python3 dist/exit-arc.pyz --capabilities
