@@ -1,0 +1,13 @@
+{
+  "name": "exit-arc-site",
+  "private": true,
+  "description": "Landing page for arc-to-firefox at exit-arc.com. Static HTML, no framework.",
+  "scripts": {
+    "lint": "html-validate public/index.html",
+    "build": "npm run lint",
+    "dev": "npx --yes serve public"
+  },
+  "devDependencies": {
+    "html-validate": "^9.0.0"
+  }
+}
