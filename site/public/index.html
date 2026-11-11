@@ -54,9 +54,60 @@
   </header>
 
   <main id="main">
+    <section class="wrap" aria-labelledby="run">
+      <h2 id="run">How to run it</h2>
+      <p>In Terminal, from a copy of the exit-arc code:</p>
+      <div class="cmd"><pre><code>python3 -m exit_arc</code></pre></div>
+      <p>It asks a few questions, then does the rest:</p>
+      <ol class="steps">
+        <li>
+          <h3>Which Arc profile?</h3>
+          <p>Only asked if you have more than one. The default is all of them.</p>
+        </li>
+        <li>
+          <h3>Here's what it found</h3>
+          <p>Your Favourites, and each space with its pinned tabs and folders.</p>
+        </li>
+        <li>
+          <h3>Where are you moving to?</h3>
+          <p>Firefox, Zen, Chrome, or no browser: just save the files.</p>
+        </li>
+        <li>
+          <h3>What should it set up there?</h3>
+          <p>It lists only what that browser supports. Press Enter for all of them, or type the numbers you want.</p>
+        </li>
+        <li>
+          <h3>Keep your bookmarks or replace them?</h3>
+          <p>Only asked if the browser already has bookmarks of yours. The default is to keep them and import the bookmarks file yourself; it shows you how.</p>
+        </li>
+        <li>
+          <h3>Where should the files go?</h3>
+          <p>The default is <code>~/Desktop/arc-export</code>.</p>
+        </li>
+        <li>
+          <h3>Go ahead?</h3>
+          <p>Nothing changes until you say yes. If the browser is open, it asks before quitting it.</p>
+        </li>
+      </ol>
+
+      <h3>You'll need</h3>
+      <ul>
+        <li>macOS with Arc's data still on disk (<code>~/Library/Application Support/Arc</code>)</li>
+        <li>Python 3.8 or newer (<code>python3 --version</code>; macOS offers to install it if it's missing)</li>
+        <li>The browser you're moving into, if any. Open it once and quit it first, so it has a profile.</li>
+      </ul>
+
+      <h3>You always get these files</h3>
+      <ul>
+        <li><code>arc-sidebar.md</code>: a readable page with a heading per space, nested folders, Favourites and your extensions</li>
+        <li><code>arc-tabs.csv</code>: one row per tab</li>
+        <li><code>arc-bookmarks.html</code>: a standard bookmarks file any browser can import</li>
+        <li><code>arc-export.json</code>: everything, for other tools</li>
+      </ul>
+    </section>
+
     <section class="wrap" aria-labelledby="moves">
       <h2 id="moves">What each browser gets</h2>
-      <p>Every step is opt-in. <code>--all</code> runs every step the browser supports.</p>
       <figure class="table-scroll" tabindex="0" aria-labelledby="moves">
         <table>
           <thead>
@@ -65,47 +116,47 @@
               <th scope="col">Firefox</th>
               <th scope="col">Zen</th>
               <th scope="col">Chrome</th>
-              <th scope="col">Export only</th>
+              <th scope="col">Just the files</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th scope="row">Bookmarks <code>--import</code><span class="sub">Favourites + a folder per space</span></th>
-              <td><span class="yes">Yes</span>, on the toolbar (replaces existing bookmarks)</td>
+              <th scope="row">Bookmarks<span class="sub">Favourites + a folder per space</span></th>
+              <td><span class="yes">Yes</span>, on the toolbar (replaces existing bookmarks; asks first)</td>
               <td><span class="yes">Yes</span>, same as Firefox</td>
               <td><span class="exp">Experimental</span>: added to the bookmarks bar, yours kept</td>
               <td>HTML, CSV, Markdown, JSON</td>
             </tr>
             <tr>
-              <th scope="row">Spaces <code>--spaces</code></th>
-              <td><span class="no">No</span>: use <code>--import</code> (a toolbar folder per space)</td>
+              <th scope="row">Spaces</th>
+              <td><span class="no">No</span>: you get a toolbar folder per space</td>
               <td><span class="yes">Yes</span>: real Zen spaces with your pinned tabs and folders</td>
               <td><span class="no">No</span>: Chrome has no spaces</td>
               <td>Listed in every format</td>
             </tr>
             <tr>
-              <th scope="row">Favourites <code>--pin-favourites</code></th>
+              <th scope="row">Favourites</th>
               <td><span class="yes">Real pinned tabs</span></td>
               <td><span class="yes">Zen Essentials</span></td>
               <td><span class="no">No</span></td>
               <td>Listed in every format</td>
             </tr>
             <tr>
-              <th scope="row">Vertical tabs <code>--vertical-tabs</code></th>
+              <th scope="row">Vertical tabs</th>
               <td><span class="yes">Yes</span></td>
               <td>Built in</td>
               <td><span class="no">No</span></td>
               <td><span aria-hidden="true">–</span><span class="sr-only">Not applicable</span></td>
             </tr>
             <tr>
-              <th scope="row">New tab cleanup <code>--clean-newtab</code><span class="sub">No sponsored shortcuts or widgets</span></th>
+              <th scope="row">New tab cleanup<span class="sub">No sponsored shortcuts or widgets</span></th>
               <td><span class="yes">Yes</span></td>
               <td><span class="yes">Yes</span></td>
               <td><span class="no">No</span></td>
               <td><span aria-hidden="true">–</span><span class="sr-only">Not applicable</span></td>
             </tr>
             <tr>
-              <th scope="row">Extensions <code>--extensions</code></th>
+              <th scope="row">Extensions</th>
               <td>Finds official add-ons; you approve each</td>
               <td>Same as Firefox</td>
               <td>Opens each Web Store page; you click Add</td>
@@ -116,91 +167,14 @@
       </figure>
     </section>
 
-    <section class="wrap" aria-labelledby="run">
-      <h2 id="run">How to run it</h2>
-
-      <h3>You'll need</h3>
-      <ul>
-        <li>macOS with Arc's data still on disk (<code>~/Library/Application Support/Arc</code>)</li>
-        <li>Python 3.8 or newer (<code>python3 --version</code>; macOS offers to install it if it's missing)</li>
-        <li>The browser you're moving into, if any. Open it once and quit it first, so it has a profile.</li>
-      </ul>
-      <p>Run these from a copy of the exit-arc code.</p>
-
-      <ol class="steps">
-        <li>
-          <h3>See what it finds</h3>
-          <p>Nothing is written.</p>
-          <div class="cmd"><pre><code>python3 -m exit_arc --dry-run</code></pre></div>
-          <p class="label">Example output:</p>
-          <pre class="output"><samp>Favourites: 8 links
-🏠 Home: 38 pinned links, 1 folder, 2 open unpinned (not bookmarked)
-💼 Projects: 26 pinned links, 2 folders, 0 open unpinned
-Total links to bookmark: 72
-Extensions: 6</samp></pre>
-        </li>
-        <li>
-          <h3>Export everything to files</h3>
-          <p>This works without any browser installed.</p>
-          <div class="cmd"><pre><code>python3 -m exit_arc -o ~/Desktop/arc-export</code></pre></div>
-          <ul>
-            <li><code>arc-sidebar.md</code>: a readable page with a heading per space, nested folders, Favourites and your extensions</li>
-            <li><code>arc-tabs.csv</code>: one row per tab</li>
-            <li><code>arc-bookmarks.html</code>: a standard bookmarks file any browser can import</li>
-            <li><code>arc-export.json</code>: everything, for other tools</li>
-          </ul>
-        </li>
-        <li>
-          <h3>Move into a browser</h3>
-          <p>Quit the browser first. Every file exit-arc changes is backed up into the output folder.</p>
-          <p class="label">Firefox</p>
-          <div class="cmd"><pre><code>python3 -m exit_arc -o ~/Desktop/arc-export --to firefox --all</code></pre></div>
-          <p class="label">Zen</p>
-          <div class="cmd"><pre><code>python3 -m exit_arc -o ~/Desktop/arc-export --to zen --all</code></pre></div>
-          <p class="label">Chrome</p>
-          <div class="cmd"><pre><code>python3 -m exit_arc -o ~/Desktop/arc-export --to chrome --import --extensions</code></pre></div>
-        </li>
-      </ol>
-
-      <details>
-        <summary>All options</summary>
-        <pre class="output"><samp>-n, --dry-run            show what would happen; write and change nothing
--o, --out DIR            output folder (default: current folder)
---format LIST            csv,md,json,html (default: all four)
---layout toolbar|folder  bookmarks layout (default: toolbar)
---include-unpinned       also bookmark open, unpinned tabs
---arc-dir DIR            Arc data folder (default: ~/Library/Application Support/Arc)
---arc-profile NAME       only this Arc profile (repeatable)
---capabilities           print what each browser supports
-
---to firefox|zen|chrome  target browser (default: firefox)
---import                 bookmarks: favourites + a folder per space
---spaces                 Zen: real spaces with pinned tabs and folders
---pin-favourites         pinned tabs (Firefox) / Essentials (Zen)
---vertical-tabs          Firefox: vertical tabs
---clean-newtab           Firefox/Zen: no sponsored shortcuts or widgets
---extensions             look up extensions and offer to install them
---all                    every step the target supports
---browser-profile DIR    profile to change (default: the browser's default)
---browser-bin PATH       browser executable
---replace-existing       let --import replace existing Firefox/Zen bookmarks
---no-backup              don't back up files before changing them
---no-show-toolbar        don't set the bookmarks toolbar to "always show"
---quit-browser           quit the browser without asking if it's open
--y, --yes                answer yes to questions (never to quitting the browser)
---timeout SECONDS        how long to wait for the browser (default 90)</samp></pre>
-      </details>
-    </section>
-
     <section class="wrap" aria-labelledby="know">
       <h2 id="know">Good to know</h2>
       <ul class="notes">
         <li>
-          <strong>Bookmarks on Firefox and Zen replace every bookmark in the profile.</strong>
-          It's meant for a fresh browser. If the profile has bookmarks of your own,
-          exit-arc stops before changing anything, unless you add <code>--replace-existing</code>.
+          <strong>Adding bookmarks to Firefox or Zen replaces every bookmark in the profile.</strong>
+          If you already have bookmarks there, exit-arc asks first and keeps them unless you choose to replace them.
         </li>
-        <li>Every file it changes is backed up first.</li>
+        <li>Everything it changes in the browser is backed up first, next to your files.</li>
         <li>
           <strong>Chrome bookmarks are experimental.</strong> If they don't appear, import
           <code>arc-bookmarks.html</code> in Chrome by hand.
@@ -211,9 +185,8 @@ Extensions: 6</samp></pre>
         </li>
         <li>
           Extensions: only extension names are sent to addons.mozilla.org, and only when you
-          use <code>--extensions</code>. Nothing is installed silently.
+          choose Extensions. Nothing is installed without your OK.
         </li>
-        <li><code>--dry-run</code> shows what would happen and changes nothing.</li>
       </ul>
     </section>
 

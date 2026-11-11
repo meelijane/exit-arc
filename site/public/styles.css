@@ -398,3 +398,7 @@ tbody th code { display: inline-block; margin-top: 0.2rem; font-size: 0.8rem; fo
 .notes li { margin-bottom: 0.6rem; }
 
 .cmd pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+.steps > li { margin-bottom: 1rem; }
+.steps > li > h3 { margin: 0.25rem 0 0.15rem; }
+.steps > li > p { margin: 0; color: var(--muted); }
