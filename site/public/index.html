@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>exit arc · move your Arc setup to Firefox</title>
+  <meta name="description" content="exit-arc moves your Arc spaces, pinned tabs, Favourites, vertical tabs and extensions to Firefox. Runs locally and sends nothing anywhere.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/copy.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="hero">
+    <div class="wrap">
+      <h1 class="sign">
+        <span class="sign-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="1em" height="1em"><path d="M4 12h13m-5-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span>exit arc</span>
+      </h1>
+
+      <p class="lede">
+        Arc stops working on <strong>22&nbsp;December&nbsp;2026</strong>.
+        <a href="https://resources.arc.net/hc/en-us/articles/44412972248471">Arc's sunset dates</a>
+      </p>
+      <p class="intro">
+        <code>exit-arc</code> moves your Arc setup into Firefox: your spaces with their
+        pinned tabs and folders, your Favourites, vertical tabs, a clean new tab page and
+        your extensions. Every step is opt-in.
+      </p>
+      <ul class="facts">
+        <li>Runs locally on your Mac</li>
+        <li>Reads Arc's files without changing them</li>
+        <li>Sends nothing anywhere</li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="wrap" aria-labelledby="moves">
+      <h2 id="moves">What comes with you</h2>
+      <ul class="moves">
+        <li class="move">
+          <h3>Spaces, pinned tabs and folders</h3>
+          <p>One Bookmarks Toolbar folder per space, same order and nesting.</p>
+          <code>--import</code>
+        </li>
+        <li class="move">
+          <h3>Favourites</h3>
+          <p>Real Firefox pinned tabs. On Zen they become Essentials.</p>
+          <code>--pin-favourites</code>
+        </li>
+        <li class="move">
+          <h3>Vertical tabs</h3>
+          <p>Firefox's tab strip moves to the side.</p>
+          <code>--vertical-tabs</code>
+        </li>
+        <li class="move">
+          <h3>A clean new tab</h3>
+          <p>No sponsored shortcuts, no widgets.</p>
+          <code>--clean-newtab</code>
+        </li>
+        <li class="move">
+          <h3>Extensions</h3>
+          <p>Matched to their official Firefox add-ons.</p>
+          <code>--extensions</code>
+        </li>
+        <li class="move">
+          <h3>Just the export</h3>
+          <p>The default. Saves everything as CSV, Markdown, JSON or HTML, and needs no browser.</p>
+          <code>--format csv,md,json,html</code>
+        </li>
+      </ul>
+      <p>
+        Firefox is the default. Zen and Chrome work too: <code>--to firefox|zen|chrome</code>.
+      </p>
+    </section>
+
+    <section class="wrap" aria-labelledby="stays">
+      <h2 id="stays">What stays behind</h2>
+      <ul class="pills">
+        <li>History</li><li>Passwords</li><li>Cookies</li><li>Extension data</li>
+      </ul>
+      <p>
+        For history and passwords, use Firefox's own importer
+        (<em>File &gt; Import From Another Browser</em>) or a password manager.
+      </p>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <p>Not affiliated with The Browser Company or Mozilla. MIT licensed.</p>
+    <p>This site has no analytics, cookies or trackers.</p>
+    <p>Made by <a href="https://millyschmidt.me">Milly Schmidt</a>.</p>
+  </footer>
+
+  <p class="sr-only" aria-live="polite" id="copy-status"></p>
+</body>
+</html>
