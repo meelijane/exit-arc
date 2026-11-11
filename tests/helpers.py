@@ -29,6 +29,10 @@ class FakeSystem(browsers.System):
         self.quit_calls = []
         self.opened = []
         self.quit_works = True
+        self.installed = {"firefox", "zen", "chrome"}
+
+    def is_installed(self, browser):
+        return browser.key in self.installed
 
     def is_running(self, browser):
         return browser.key in self.running

@@ -76,6 +76,9 @@ class System:
             time.sleep(0.5)
         return False
 
+    def is_installed(self, browser):
+        return browser.find_app() is not None or shutil.which(browser.executable) is not None
+
     def launch_headless(self, binary, profile):
         return subprocess.Popen([str(binary), "--headless", "--no-remote", "--profile", str(profile)],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

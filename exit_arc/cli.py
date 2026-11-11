@@ -82,7 +82,8 @@ def capability_table():
 def parse_args(argv=None):
     p = argparse.ArgumentParser(
         prog="exit-arc",
-        description="Export your Arc sidebar to files, and optionally move it into Firefox, Zen or Chrome.",
+        description="Export your Arc sidebar to files, and optionally move it into Firefox, Zen or Chrome. "
+                    "Run exit-arc with no options to be asked questions instead.",
         epilog="History, passwords, cookies and extension data are never touched. "
                "Run with --capabilities to see what each browser supports.")
     p.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
@@ -170,10 +171,10 @@ def run(args, ask=None, log=print):
         log("Looking up your extensions on addons.mozilla.org (only their names are sent) ...")
     extensions.annotate(export, lookup=lookup, log=log)
 
-    for line in exporters.summary(export, args.include_unpinned):
-        log(line)
-    n_ext = len(extensions.unique_extensions(export))
-    log(f"Extensions: {n_ext}")
+    if not getattr(args, "guided", False):  # the guided flow has already shown this
+        for line in exporters.summary(export, args.include_unpinned):
+            log(line)
+        log(f"Extensions: {len(extensions.unique_extensions(export))}")
 
     paths = {f: args.out / exporters.FILENAMES[f] for f in formats}
     html_text = exporters.build_html(export, args.layout, args.include_unpinned)
@@ -187,7 +188,7 @@ def run(args, ask=None, log=print):
     html_path = paths.get("html")
 
     if not steps:
-        if html_path and not args.dry_run:
+        if html_path and not args.dry_run and not getattr(args, "guided", False):
             log(f"\nTo add these to {target.label} by hand: " + MANUAL_IMPORT[target.key].format(html=html_path))
             log("Or let exit-arc do it: see --help (e.g. --import, --all).")
         return 0
@@ -219,7 +220,7 @@ def move(args, export, target, steps, html_text, html_path, ask, log):
             return problem
         if args.dry_run:
             log("[dry run] The profile was not changed.")
-        elif not ask(f"Change this {target.label} profile now?"):
+        elif not getattr(args, "confirmed", False) and not ask(f"Change this {target.label} profile now?"):
             log("Cancelled. Nothing was changed.")
             return 1
         else:
@@ -380,9 +381,12 @@ def offer_extensions(args, export, target, ask, log):
 
 
 def main(argv=None):
-    args = parse_args(argv)
+    argv = sys.argv[1:] if argv is None else list(argv)
     try:
-        return run(args)
+        if not argv:  # no options: ask questions instead
+            from . import guided
+            return guided.run(parse_args([]))
+        return run(parse_args(argv))
     except ToolError as e:
         print(f"exit-arc: {e}", file=sys.stderr)
         return 1
