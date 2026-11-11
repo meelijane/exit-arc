@@ -56,8 +56,15 @@
   <main id="main">
     <section class="wrap" aria-labelledby="run">
       <h2 id="run">How to run it</h2>
-      <p>In Terminal, from a copy of the exit-arc code:</p>
-      <div class="cmd"><pre><code>python3 -m exit_arc</code></pre></div>
+      <p>Install it with <a href="https://brew.sh">Homebrew</a>:</p>
+      <div class="cmd"><pre><code>brew install meelijane/tap/exit-arc</code></pre></div>
+      <p>Then run it in Terminal:</p>
+      <div class="cmd"><pre><code>exit-arc</code></pre></div>
+      <p class="aside">
+        Without Homebrew: download <code>exit-arc.pyz</code> from the
+        <a href="https://github.com/meelijane/exit-arc/releases/latest">latest release</a>
+        and run <code>python3 exit-arc.pyz</code>.
+      </p>
       <p>It asks a few questions, then does the rest:</p>
       <ol class="steps">
         <li>
@@ -93,7 +100,7 @@
       <h3>You'll need</h3>
       <ul>
         <li>macOS with Arc's data still on disk (<code>~/Library/Application Support/Arc</code>)</li>
-        <li>Python 3.8 or newer (<code>python3 --version</code>; macOS offers to install it if it's missing)</li>
+        <li>Python 3.8 or newer. Macs with Homebrew already have it; otherwise macOS offers to install it the first time you run <code>python3</code>.</li>
         <li>The browser you're moving into, if any. Open it once and quit it first, so it has a profile.</li>
       </ul>
 
@@ -201,7 +208,8 @@
   </main>
 
   <footer class="wrap footer">
-    <p>Not affiliated with The Browser Company, Mozilla, Zen or Google. MIT licensed.</p>
+    <p><a href="https://github.com/meelijane/exit-arc">Source on GitHub</a>. MIT licensed.</p>
+    <p>Not affiliated with The Browser Company, Mozilla, Zen or Google.</p>
     <p>This site has no analytics, cookies or trackers.</p>
     <p>Made by <a href="https://millyschmidt.me">Milly Schmidt</a>.</p>
   </footer>
