@@ -2,12 +2,10 @@
 
 ## Distribution
 
-- **Publish**: pick a GitHub repo name/URL, push, and attach `dist/exit-arc.pyz`
-  to a release so people can download one file and run `python3 exit-arc.pyz`.
+- **Homebrew core**: the formula lives in the meelijane/homebrew-tap tap; homebrew-core needs a
+  notable project first.
 - **pipx / PyPI**: `pyproject.toml` already defines the `exit-arc` command, so
-  `pipx install exit-arc` works once it's published.
-- **Homebrew**: a personal tap (`homebrew-tap` repo) with a formula that installs
-  the package and depends on `python@3`.
+  `pipx install exit-arc` works once it's published to PyPI.
 - **Tiny macOS app**: one window (SwiftUI, or Tauri) that shows the dry-run
   summary and the capability table, has a browser picker and checkboxes for
   each step, and runs the bundled `.pyz` with `--yes --quit-browser` after its

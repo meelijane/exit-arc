@@ -30,17 +30,27 @@ the browser's own importer or a password manager.
 ## Requirements
 
 - macOS with Arc's data still on disk (`~/Library/Application Support/Arc`)
-- Python 3.8 or newer (`python3 --version`; macOS offers to install it if it's missing)
+- Homebrew, which installs Python for you. Without Homebrew: Python 3.8 or newer
+  (`python3 --version`; macOS offers to install it if it's missing)
 - The target browser, if you're moving into one. Open it once and quit it
   before using exit-arc, so it has a profile.
 
 ## How to use it
 
-Download this repo (a one-file download is planned), then in Terminal, from its folder:
+Install it with [Homebrew](https://brew.sh):
 
 ```bash
-python3 -m exit_arc
+brew install meelijane/tap/exit-arc
 ```
+
+Then run it:
+
+```bash
+exit-arc
+```
+
+Without Homebrew: download `exit-arc.pyz` from the
+[latest release](https://github.com/meelijane/exit-arc/releases/latest) and run `python3 exit-arc.pyz`.
 
 It asks a few questions, then does the rest:
 
@@ -143,9 +153,9 @@ For scripts, every answer can be given as an option instead. With any option, ex
 except before quitting a browser and before opening extension installs (`--yes` skips the second).
 
 ```bash
-python3 -m exit_arc --dry-run                                  # show what it finds, change nothing
-python3 -m exit_arc -o ~/Desktop/arc-export                    # just save the files
-python3 -m exit_arc -o ~/Desktop/arc-export --to zen --all     # everything Zen supports
+exit-arc --dry-run                                # show what it finds, change nothing
+exit-arc -o ~/Desktop/arc-export                  # just save the files
+exit-arc -o ~/Desktop/arc-export --to zen --all   # everything Zen supports
 ```
 
 ```
