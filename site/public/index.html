@@ -116,6 +116,82 @@
       </figure>
     </section>
 
+    <section class="wrap" aria-labelledby="run">
+      <h2 id="run">How to run it</h2>
+
+      <h3>You'll need</h3>
+      <ul>
+        <li>macOS with Arc's data still on disk (<code>~/Library/Application Support/Arc</code>)</li>
+        <li>Python 3.8 or newer (<code>python3 --version</code>; macOS offers to install it if it's missing)</li>
+        <li>The browser you're moving into, if any. Open it once and quit it first, so it has a profile.</li>
+      </ul>
+      <p>Run these from a copy of the exit-arc code.</p>
+
+      <ol class="steps">
+        <li>
+          <h3>See what it finds</h3>
+          <p>Nothing is written.</p>
+          <div class="cmd"><pre><code>python3 -m exit_arc --dry-run</code></pre></div>
+          <p class="label">Example output:</p>
+          <pre class="output"><samp>Favourites: 8 links
+🏠 Home: 38 pinned links, 1 folder, 2 open unpinned (not bookmarked)
+💼 Projects: 26 pinned links, 2 folders, 0 open unpinned
+Total links to bookmark: 72
+Extensions: 6</samp></pre>
+        </li>
+        <li>
+          <h3>Export everything to files</h3>
+          <p>This works without any browser installed.</p>
+          <div class="cmd"><pre><code>python3 -m exit_arc -o ~/Desktop/arc-export</code></pre></div>
+          <ul>
+            <li><code>arc-sidebar.md</code>: a readable page with a heading per space, nested folders, Favourites and your extensions</li>
+            <li><code>arc-tabs.csv</code>: one row per tab</li>
+            <li><code>arc-bookmarks.html</code>: a standard bookmarks file any browser can import</li>
+            <li><code>arc-export.json</code>: everything, for other tools</li>
+          </ul>
+        </li>
+        <li>
+          <h3>Move into a browser</h3>
+          <p>Quit the browser first. Every file exit-arc changes is backed up into the output folder.</p>
+          <p class="label">Firefox</p>
+          <div class="cmd"><pre><code>python3 -m exit_arc -o ~/Desktop/arc-export --to firefox --all</code></pre></div>
+          <p class="label">Zen</p>
+          <div class="cmd"><pre><code>python3 -m exit_arc -o ~/Desktop/arc-export --to zen --all</code></pre></div>
+          <p class="label">Chrome</p>
+          <div class="cmd"><pre><code>python3 -m exit_arc -o ~/Desktop/arc-export --to chrome --import --extensions</code></pre></div>
+        </li>
+      </ol>
+
+      <details>
+        <summary>All options</summary>
+        <pre class="output"><samp>-n, --dry-run            show what would happen; write and change nothing
+-o, --out DIR            output folder (default: current folder)
+--format LIST            csv,md,json,html (default: all four)
+--layout toolbar|folder  bookmarks layout (default: toolbar)
+--include-unpinned       also bookmark open, unpinned tabs
+--arc-dir DIR            Arc data folder (default: ~/Library/Application Support/Arc)
+--arc-profile NAME       only this Arc profile (repeatable)
+--capabilities           print what each browser supports
+
+--to firefox|zen|chrome  target browser (default: firefox)
+--import                 bookmarks: favourites + a folder per space
+--spaces                 Zen: real spaces with pinned tabs and folders
+--pin-favourites         pinned tabs (Firefox) / Essentials (Zen)
+--vertical-tabs          Firefox: vertical tabs
+--clean-newtab           Firefox/Zen: no sponsored shortcuts or widgets
+--extensions             look up extensions and offer to install them
+--all                    every step the target supports
+--browser-profile DIR    profile to change (default: the browser's default)
+--browser-bin PATH       browser executable
+--replace-existing       let --import replace existing Firefox/Zen bookmarks
+--no-backup              don't back up files before changing them
+--no-show-toolbar        don't set the bookmarks toolbar to "always show"
+--quit-browser           quit the browser without asking if it's open
+-y, --yes                answer yes to questions (never to quitting the browser)
+--timeout SECONDS        how long to wait for the browser (default 90)</samp></pre>
+      </details>
+    </section>
+
     <section class="wrap" aria-labelledby="know">
       <h2 id="know">Good to know</h2>
       <ul class="notes">

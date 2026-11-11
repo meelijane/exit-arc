@@ -1,36 +1,46 @@
 :root {
-  --bg: #f4f1ea;
-  --surface: #fffdf8;
-  --ink: #1b1d1a;
-  --muted: #555a52;
-  --line: #d9d4c7;
+  /* Arc logo palette: coral #ff536a, pink #ff9396, blue #002dc8, indigo #1a007f.
+     The sign stays exit-sign green. */
+  --coral: #ff536a;
+  --pink: #ff9396;
+  --blue: #002dc8;
+  --indigo: #1a007f;
+  --bg: #fff7f6;
+  --surface: #ffffff;
+  --ink: #1a1238;
+  --muted: #595270;
+  --line: #f1d5d8;
   --sign: #0b6e38;
   --sign-ink: #ffffff;
   --sign-glow: rgba(11, 110, 56, 0.25);
-  --link: #0b6e38;
-  --code-bg: #1b1d1a;
-  --code-ink: #e6f2e9;
-  --warn-bg: #fff3d6;
-  --warn-line: #b7791f;
+  --link: var(--blue);
+  --accent: var(--coral);
+  --exp: #c4233c;
+  --code-bg: var(--indigo);
+  --code-ink: #ffe4e6;
+  --warn-bg: #ffecee;
+  --warn-line: var(--coral);
+  --glow-a: rgba(255, 83, 106, 0.16);
+  --glow-b: rgba(0, 45, 200, 0.10);
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #111311;
-    --surface: #191c19;
-    --ink: #ebeee8;
-    --muted: #a5aba0;
-    --line: #2c312b;
-    --sign: #0b6e38;
-    --sign-ink: #ffffff;
+    --bg: #0d0a22;
+    --surface: #17123a;
+    --ink: #f4f1ff;
+    --muted: #b4acd3;
+    --line: #2e2763;
     --sign-glow: rgba(46, 204, 113, 0.35);
-    --link: #6fdc9b;
-    --code-bg: #0a0b0a;
-    --code-ink: #d9f0df;
-    --warn-bg: #2b2412;
-    --warn-line: #d69e2e;
+    --link: var(--pink);
+    --exp: var(--pink);
+    --code-bg: #07051a;
+    --code-ink: #ffd9dc;
+    --warn-bg: #2b1233;
+    --glow-a: rgba(255, 83, 106, 0.20);
+    --glow-b: rgba(0, 45, 200, 0.28);
   }
 }
 
@@ -81,7 +91,12 @@ a:hover { text-decoration-thickness: 2px; }
 }
 
 /* Hero */
-.hero { padding: 4rem 0 2.5rem; }
+.hero {
+  padding: 4rem 0 2.5rem;
+  background:
+    radial-gradient(40rem 22rem at 88% -10%, var(--glow-a), transparent 70%),
+    radial-gradient(36rem 20rem at 0% 110%, var(--glow-b), transparent 70%);
+}
 
 .sign {
   display: inline-flex;
@@ -205,7 +220,7 @@ a:hover { text-decoration-thickness: 2px; }
   padding: 0.25rem 0.8rem;
   font-size: 0.95rem;
 }
-.facts li::before { content: "✓ "; color: var(--link); font-weight: 700; }
+.facts li::before { content: "✓ "; color: var(--accent); font-weight: 700; }
 
 /* Sections */
 main section.wrap { padding: 2.5rem 1rem; border-top: 1px dashed var(--line); }
@@ -264,8 +279,8 @@ tbody tr { border-top: 1px solid var(--line); }
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--sign);
-  color: var(--sign-ink);
+  background: var(--coral);
+  color: var(--indigo);
   font-weight: 800;
 }
 .steps > li > h3 { margin-top: 0.2rem; }
@@ -302,8 +317,8 @@ pre {
   align-self: center;
   margin: 0 0.5rem;
   font: 600 0.8rem var(--sans);
-  background: var(--sign);
-  color: var(--sign-ink);
+  background: var(--coral);
+  color: var(--indigo);
   border: 0;
   border-radius: 6px;
   padding: 0.4rem 0.7rem;
@@ -386,8 +401,9 @@ tbody th code { display: inline-block; margin-top: 0.2rem; font-size: 0.8rem; fo
 .yes, .no, .exp { font-weight: 700; }
 .yes { color: var(--link); }
 .no { color: var(--muted); }
-.exp { color: var(--warn-line); }
-@media (prefers-color-scheme: light) { .exp { color: #8a5a12; } }
+.exp { color: var(--exp); }
 
 .notes { padding-left: 1.2rem; margin: 0; }
 .notes li { margin-bottom: 0.6rem; }
+
+.cmd pre { white-space: pre-wrap; overflow-wrap: anywhere; }
