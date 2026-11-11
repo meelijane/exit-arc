@@ -90,8 +90,12 @@
           <p>It lists only what that browser supports, including making it your default browser. Press Enter for all of them, or type the numbers you want.</p>
         </li>
         <li>
+          <h3>Which profile?</h3>
+          <p>Only asked if the browser has more than one. Each is listed with its folder and how many bookmarks it has. The default is the one the browser opens.</p>
+        </li>
+        <li>
           <h3>Keep your bookmarks or replace them?</h3>
-          <p>Only asked if the browser already has bookmarks of yours. The default is to keep them and import the bookmarks file yourself; it shows you how.</p>
+          <p>Only asked if that profile already has bookmarks of yours. The default is to keep them and import the bookmarks file yourself; it shows you how.</p>
         </li>
         <li>
           <h3>Remove Arc when it's done?</h3>
@@ -121,6 +125,32 @@
         <li><code>arc-bookmarks.html</code>: a standard bookmarks file any browser can import</li>
         <li><code>arc-export.json</code>: everything, for other tools</li>
       </ul>
+    </section>
+
+    <section class="wrap" aria-labelledby="claude">
+      <h2 id="claude">Use it with Claude</h2>
+      <p>
+        exit-arc is also a Claude Code plugin with an <code>exit-arc</code> skill. With it, you can ask
+        Claude to help you move off Arc. Add it in Claude Code:
+      </p>
+      <div class="cmd"><pre><code>/plugin marketplace add meelijane/exit-arc</code></pre></div>
+      <div class="cmd"><pre><code>/plugin install exit-arc@exit-arc</code></pre></div>
+      <p>Then Claude:</p>
+      <ul>
+        <li>installs exit-arc with Homebrew if it's missing</li>
+        <li>shows you what's in Arc, without changing anything</li>
+        <li>asks which browser and which steps you want, offering only what that browser supports</li>
+        <li>tells you before it runs that bookmarks may be replaced, that extension names go to addons.mozilla.org, and that macOS will ask about your default browser</li>
+        <li>runs exit-arc with only the steps you agreed to</li>
+      </ul>
+      <p>
+        It leaves two things to you: quitting your browser (it asks you to, or quits it only after you
+        say yes), and removing Arc, which it never does for you.
+      </p>
+      <p class="aside">
+        The skill is one file:
+        <a href="https://github.com/meelijane/exit-arc/blob/main/skills/exit-arc/SKILL.md">skills/exit-arc/SKILL.md</a>.
+      </p>
     </section>
 
     <section class="wrap" aria-labelledby="moves">
