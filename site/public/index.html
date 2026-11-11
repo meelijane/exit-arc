@@ -81,11 +81,15 @@
         </li>
         <li>
           <h3>What should it set up there?</h3>
-          <p>It lists only what that browser supports. Press Enter for all of them, or type the numbers you want.</p>
+          <p>It lists only what that browser supports, including making it your default browser. Press Enter for all of them, or type the numbers you want.</p>
         </li>
         <li>
           <h3>Keep your bookmarks or replace them?</h3>
           <p>Only asked if the browser already has bookmarks of yours. The default is to keep them and import the bookmarks file yourself; it shows you how.</p>
+        </li>
+        <li>
+          <h3>Remove Arc when it's done?</h3>
+          <p>Only asked if Arc is installed. The default is no.</p>
         </li>
         <li>
           <h3>Where should the files go?</h3>
@@ -169,6 +173,13 @@
               <td>Opens each Web Store page; you click Add</td>
               <td>Listed in Markdown and JSON</td>
             </tr>
+            <tr>
+              <th scope="row">Default browser</th>
+              <td><span class="yes">Yes</span> (macOS asks you to confirm)</td>
+              <td><span class="yes">Yes</span></td>
+              <td><span class="yes">Yes</span></td>
+              <td><span aria-hidden="true">–</span><span class="sr-only">Not applicable</span></td>
+            </tr>
           </tbody>
         </table>
       </figure>
@@ -193,6 +204,12 @@
         <li>
           Extensions: only extension names are sent to addons.mozilla.org, and only when you
           choose Extensions. Nothing is installed without your OK.
+        </li>
+        <li>
+          <strong>Removing Arc is optional and recoverable.</strong> You choose the app only, or the
+          app and its data. It runs only after everything else has worked, moves things to the Trash,
+          and asks once more first. Arc's history, passwords and cookies aren't moved to your new
+          browser, so export them from Arc first if you want them.
         </li>
       </ul>
     </section>
