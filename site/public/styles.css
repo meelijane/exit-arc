@@ -168,7 +168,6 @@ table { width: 100%; border-collapse: collapse; }
 th, td { text-align: left; padding: 0.65rem 0.9rem; vertical-align: top; }
 th { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
 tbody tr { border-top: 1px solid var(--line); }
-td:first-child { width: 50%; }
 
 .chip { white-space: nowrap; }
 
@@ -312,25 +311,24 @@ details .output { border: 0; border-top: 1px solid var(--line); border-radius: 0
 
 .label { margin: 0.75rem 0 0.35rem; font-size: 0.9rem; color: var(--muted); }
 
-/* What comes with you */
-.moves {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1.25rem;
-  display: grid;
-  gap: 0.75rem;
+/* Capability table */
+.table-scroll { margin: 0; position: relative; }
+table { min-width: 44rem; font-size: 0.95rem; }
+tbody th {
+  text-align: left;
+  font-size: 1rem;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink);
+  width: 22%;
 }
-@media (min-width: 40rem) { .moves { grid-template-columns: 1fr 1fr; } }
-.move {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 1rem 1.1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  min-width: 0;
-}
-.move h3 { margin: 0; }
-.move p { margin: 0; flex: 1; }
-.move code { align-self: flex-start; overflow-wrap: anywhere; }
+tbody th code { display: inline-block; margin-top: 0.2rem; font-size: 0.8rem; font-weight: 500; }
+.sub { display: block; font-weight: 400; font-size: 0.85rem; color: var(--muted); margin-top: 0.2rem; }
+.yes, .no, .exp { font-weight: 700; }
+.yes { color: var(--link); }
+.no { color: var(--muted); }
+.exp { color: var(--warn-line); }
+@media (prefers-color-scheme: light) { .exp { color: #8a5a12; } }
+
+.notes { padding-left: 1.2rem; margin: 0; }
+.notes li { margin-bottom: 0.6rem; }

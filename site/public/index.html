@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>exit arc · move your Arc setup to Firefox</title>
-  <meta name="description" content="exit-arc moves your Arc spaces, pinned tabs, Favourites, vertical tabs and extensions to Firefox. Runs locally and sends nothing anywhere.">
+  <title>exit arc · take your Arc sidebar with you</title>
+  <meta name="description" content="exit-arc takes your Arc spaces, pinned tabs, folders, Favourites and extensions to Firefox, Zen or Chrome, or saves them as plain files. Runs on your Mac.">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/styles.css">
@@ -27,72 +27,120 @@
         <a href="https://resources.arc.net/hc/en-us/articles/44412972248471">Arc's sunset dates</a>
       </p>
       <p class="intro">
-        <code>exit-arc</code> moves your Arc setup into Firefox: your spaces with their
-        pinned tabs and folders, your Favourites, vertical tabs, a clean new tab page and
-        your extensions. Every step is opt-in.
+        <code>exit-arc</code> takes your sidebar with you: every space, its pinned tabs
+        and folders, your Favourites and your list of extensions. It can save them as
+        plain files, or set them up in <strong>Firefox</strong>, <strong>Zen</strong>
+        or <strong>Chrome</strong>.
       </p>
       <ul class="facts">
-        <li>Runs locally on your Mac</li>
-        <li>Reads Arc's files without changing them</li>
-        <li>Sends nothing anywhere</li>
+        <li>Plain Python, no dependencies</li>
+        <li>Runs on your Mac</li>
+        <li>Only reads Arc's files</li>
+        <li>Sends nothing anywhere unless you ask it to look up extensions</li>
       </ul>
     </div>
   </header>
 
   <main id="main">
     <section class="wrap" aria-labelledby="moves">
-      <h2 id="moves">What comes with you</h2>
-      <ul class="moves">
-        <li class="move">
-          <h3>Spaces, pinned tabs and folders</h3>
-          <p>One Bookmarks Toolbar folder per space, same order and nesting.</p>
-          <code>--import</code>
+      <h2 id="moves">What each browser gets</h2>
+      <p>Every step is opt-in. <code>--all</code> runs every step the browser supports.</p>
+      <figure class="table-scroll" tabindex="0" aria-labelledby="moves">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col"><span class="sr-only">Step</span></th>
+              <th scope="col">Firefox</th>
+              <th scope="col">Zen</th>
+              <th scope="col">Chrome</th>
+              <th scope="col">Export only</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Bookmarks <code>--import</code><span class="sub">Favourites + a folder per space</span></th>
+              <td><span class="yes">Yes</span>, on the toolbar (replaces existing bookmarks)</td>
+              <td><span class="yes">Yes</span>, same as Firefox</td>
+              <td><span class="exp">Experimental</span>: added to the bookmarks bar, yours kept</td>
+              <td>HTML, CSV, Markdown, JSON</td>
+            </tr>
+            <tr>
+              <th scope="row">Spaces <code>--spaces</code></th>
+              <td><span class="no">No</span>: use <code>--import</code> (a toolbar folder per space)</td>
+              <td><span class="yes">Yes</span>: real Zen spaces with your pinned tabs and folders</td>
+              <td><span class="no">No</span>: Chrome has no spaces</td>
+              <td>Listed in every format</td>
+            </tr>
+            <tr>
+              <th scope="row">Favourites <code>--pin-favourites</code></th>
+              <td><span class="yes">Real pinned tabs</span></td>
+              <td><span class="yes">Zen Essentials</span></td>
+              <td><span class="no">No</span></td>
+              <td>Listed in every format</td>
+            </tr>
+            <tr>
+              <th scope="row">Vertical tabs <code>--vertical-tabs</code></th>
+              <td><span class="yes">Yes</span></td>
+              <td>Built in</td>
+              <td><span class="no">No</span></td>
+              <td><span aria-hidden="true">–</span><span class="sr-only">Not applicable</span></td>
+            </tr>
+            <tr>
+              <th scope="row">New tab cleanup <code>--clean-newtab</code><span class="sub">No sponsored shortcuts or widgets</span></th>
+              <td><span class="yes">Yes</span></td>
+              <td><span class="yes">Yes</span></td>
+              <td><span class="no">No</span></td>
+              <td><span aria-hidden="true">–</span><span class="sr-only">Not applicable</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Extensions <code>--extensions</code></th>
+              <td>Finds official add-ons; you approve each</td>
+              <td>Same as Firefox</td>
+              <td>Opens each Web Store page; you click Add</td>
+              <td>Listed in Markdown and JSON</td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    </section>
+
+    <section class="wrap" aria-labelledby="know">
+      <h2 id="know">Good to know</h2>
+      <ul class="notes">
+        <li>
+          <strong>Bookmarks on Firefox and Zen replace every bookmark in the profile.</strong>
+          It's meant for a fresh browser. If the profile has bookmarks of your own,
+          exit-arc stops before changing anything, unless you add <code>--replace-existing</code>.
         </li>
-        <li class="move">
-          <h3>Favourites</h3>
-          <p>Real Firefox pinned tabs. On Zen they become Essentials.</p>
-          <code>--pin-favourites</code>
+        <li>Every file it changes is backed up first.</li>
+        <li>
+          <strong>Chrome bookmarks are experimental.</strong> If they don't appear, import
+          <code>arc-bookmarks.html</code> in Chrome by hand.
         </li>
-        <li class="move">
-          <h3>Vertical tabs</h3>
-          <p>Firefox's tab strip moves to the side.</p>
-          <code>--vertical-tabs</code>
+        <li>
+          <strong>Zen spaces are tested on Zen 1.24.</strong> Zen doesn't document the file
+          they live in, so a future Zen version may change the format.
         </li>
-        <li class="move">
-          <h3>A clean new tab</h3>
-          <p>No sponsored shortcuts, no widgets.</p>
-          <code>--clean-newtab</code>
+        <li>
+          Extensions: only extension names are sent to addons.mozilla.org, and only when you
+          use <code>--extensions</code>. Nothing is installed silently.
         </li>
-        <li class="move">
-          <h3>Extensions</h3>
-          <p>Matched to their official Firefox add-ons.</p>
-          <code>--extensions</code>
-        </li>
-        <li class="move">
-          <h3>Just the export</h3>
-          <p>The default. Saves everything as CSV, Markdown, JSON or HTML, and needs no browser.</p>
-          <code>--format csv,md,json,html</code>
-        </li>
+        <li><code>--dry-run</code> shows what would happen and changes nothing.</li>
       </ul>
-      <p>
-        Firefox is the default. Zen and Chrome work too: <code>--to firefox|zen|chrome</code>.
-      </p>
     </section>
 
     <section class="wrap" aria-labelledby="stays">
       <h2 id="stays">What stays behind</h2>
       <ul class="pills">
-        <li>History</li><li>Passwords</li><li>Cookies</li><li>Extension data</li>
+        <li>History</li><li>Passwords</li><li>Cookies and logins</li><li>Extension data and settings</li>
+        <li>Boosts</li><li>Easels</li><li>Notes</li><li>Little Arc</li><li>Site permissions</li>
       </ul>
-      <p>
-        For history and passwords, use Firefox's own importer
-        (<em>File &gt; Import From Another Browser</em>) or a password manager.
-      </p>
+      <p>For history and passwords, use the browser's own importer or a password manager.</p>
     </section>
   </main>
 
   <footer class="wrap footer">
-    <p>Not affiliated with The Browser Company or Mozilla. MIT licensed.</p>
+    <p>Not affiliated with The Browser Company, Mozilla, Zen or Google. MIT licensed.</p>
     <p>This site has no analytics, cookies or trackers.</p>
     <p>Made by <a href="https://millyschmidt.me">Milly Schmidt</a>.</p>
   </footer>
