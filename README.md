@@ -20,6 +20,7 @@ files, and sends nothing anywhere unless you ask it to look up extensions.
 | **Vertical tabs** | yes | built in | no | - |
 | **New tab cleanup** | yes | yes | no | - |
 | **Extensions** | finds official add-ons; you approve each | same as Firefox | opens each Web Store page; you click Add | listed in Markdown and JSON |
+| **Default browser** | yes (macOS asks you to confirm) | yes | yes | - |
 | History, passwords, cookies, extension data | no | no | no | no |
 
 Not moved: history, passwords, cookies/logins, extension data and settings,
@@ -59,11 +60,13 @@ It asks a few questions, then does the rest:
 3. **Where are you moving to?** Firefox, Zen, Chrome, or no browser (just save the files).
 4. **What should it set up there?** It lists only what that browser supports. Press Enter for all
    of them, or type the numbers you want.
+   This includes making it your **default browser** (macOS asks you to confirm), unless it already is.
 5. If the browser already has bookmarks of yours: **keep them or replace them?** Adding bookmarks
    automatically replaces all of them, so the default is to keep yours and import the bookmarks
    file yourself (it shows you how).
-6. **Where should the files go?** The default is `~/Desktop/arc-export`.
-7. **Go ahead?** If the browser is open, it then asks before quitting it.
+6. **Remove Arc when it's done?** The default is no. See [Removing Arc](#removing-arc).
+7. **Where should the files go?** The default is `~/Desktop/arc-export`.
+8. **Go ahead?** If the browser is open, it then asks before quitting it.
 
 Nothing changes until you say yes at the end. Everything it changes in the browser is backed up first,
 into `backup-<browser>-<time>/` in the same folder as the files.
@@ -147,6 +150,26 @@ nothing is installed silently. Extension data such as password vaults and settin
 so sign in again in each one. Pre-installed extensions (like Google Docs Offline) and Arc's own
 built-ins are left out.
 
+### Default browser
+
+macOS doesn't let programs change your default browser silently: it shows its own "Do you want to
+change your default web browser?" box, and nothing changes unless you choose the new browser there.
+You can also change it later in *System Settings > Desktop & Dock > Default web browser*.
+
+### Removing Arc
+
+If you choose to, exit-arc removes Arc after everything else has worked:
+
+- **The app only**: moves `Arc.app` to the Trash. Arc's data (history, passwords, cookies, your
+  sidebar) stays on your Mac, so you can reinstall Arc or run exit-arc again later.
+- **The app and its data**: also moves Arc's data folder, caches and settings to the Trash. Arc's
+  history, passwords and cookies are **not** moved to your new browser, so export them from Arc first
+  if you want them.
+
+Everything goes to the Trash, so you can put it back until you empty it. exit-arc quits Arc first
+(asking before it does), and it always asks once more before moving anything, even with `--yes`.
+If Arc syncs with an Arc account, your account and its synced data stay online.
+
 ## Running it without questions
 
 For scripts, every answer can be given as an option instead. With any option, exit-arc asks nothing
@@ -175,7 +198,9 @@ exit-arc -o ~/Desktop/arc-export --to zen --all   # everything Zen supports
 --vertical-tabs          Firefox: vertical tabs
 --clean-newtab           Firefox/Zen: no sponsored shortcuts or widgets
 --extensions             look up extensions and offer to install them
+--default-browser        make the target your default browser (macOS asks you to confirm)
 --all                    every step the target supports
+--remove-arc app|all     afterwards, move Arc (app, or app + data) to the Trash; always asks
 --browser-profile DIR    profile to change (default: the browser's default)
 --browser-bin PATH       browser executable
 --replace-existing       let --import replace existing Firefox/Zen bookmarks

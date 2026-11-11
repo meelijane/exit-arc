@@ -4,6 +4,7 @@ Everything that starts, quits or checks a real browser goes through `system`,
 so tests can swap it for a fake and never launch anything real.
 """
 
+import plistlib
 import shutil
 import subprocess
 import sys
@@ -53,6 +54,18 @@ CHROME = Browser("chrome", "Chrome", "chromium", "Google Chrome", "Google Chrome
 
 BROWSERS = {b.key: b for b in (FIREFOX, ZEN, CHROME)}
 
+# Arc itself: not a target, but exit-arc can quit it and move it to the Trash.
+ARC = Browser("arc", "Arc", "chromium", "Arc", "Arc", ("Arc.app",), "Arc", SUPPORT / "Arc")
+ARC_BUNDLE_ID = "company.thebrowser.Browser"
+
+
+def arc_data_paths(home=None):
+    """Arc's own files outside the app (its data folder, caches, settings)."""
+    lib = Path(home or Path.home()) / "Library"
+    return [lib / "Application Support" / "Arc", lib / "Caches" / "Arc", lib / "Caches" / ARC_BUNDLE_ID,
+            lib / "Preferences" / f"{ARC_BUNDLE_ID}.plist", lib / "Saved Application State" / f"{ARC_BUNDLE_ID}.savedState",
+            lib / "HTTPStorages" / ARC_BUNDLE_ID, lib / "WebKit" / ARC_BUNDLE_ID]
+
 
 class System:
     """Real OS operations. Tests replace `browsers.system` with a fake."""
@@ -91,6 +104,43 @@ class System:
 
     def sleep(self, seconds):
         time.sleep(seconds)
+
+    def app_path(self, browser):
+        return browser.find_app()
+
+    def trash(self, path):
+        """Move path to the Trash (Finder's Put Back works). Returns True on success."""
+        script = ('function run(argv) { ObjC.import("Foundation"); return $.NSFileManager.defaultManager'
+                  '.trashItemAtURLResultingItemURLError($.NSURL.fileURLWithPath(argv[0]), null, null); }')
+        r = subprocess.run(["osascript", "-l", "JavaScript", "-e", script, str(path)], capture_output=True, text=True)
+        return r.returncode == 0 and r.stdout.strip() == "true"
+
+    def bundle_id(self, browser):
+        app = browser.find_app()
+        if not app:
+            return None
+        try:
+            with open(app / "Contents" / "Info.plist", "rb") as f:
+                return plistlib.load(f).get("CFBundleIdentifier")
+        except (OSError, ValueError):
+            return None
+
+    def default_browser(self):
+        """Bundle ID of the app that opens https links, or None if unknown."""
+        if sys.platform != "darwin":
+            return None
+        script = ('ObjC.import("CoreServices"); '
+                  'ObjC.unwrap(ObjC.castRefToObject($.LSCopyDefaultHandlerForURLScheme($("https"))))')
+        r = subprocess.run(["osascript", "-l", "JavaScript", "-e", script], capture_output=True, text=True)
+        return r.stdout.strip() or None if r.returncode == 0 else None
+
+    def set_default_browser(self, bundle_id):
+        """Ask macOS to make bundle_id the default browser. macOS shows its own prompt to confirm."""
+        script = ('function run(argv) { ObjC.import("CoreServices"); var id = $(argv[0]); '
+                  'return [$.LSSetDefaultHandlerForURLScheme($("http"), id), '
+                  '$.LSSetDefaultHandlerForURLScheme($("https"), id)].join(" "); }')
+        r = subprocess.run(["osascript", "-l", "JavaScript", "-e", script, bundle_id], capture_output=True, text=True)
+        return r.returncode == 0
 
 
 system = System()

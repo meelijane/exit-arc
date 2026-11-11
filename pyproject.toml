@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "exit-arc"
-version = "0.3.0"
+version = "0.4.0"
 description = "Move your Arc browser spaces, pinned tabs, folders, favourites and extensions to Firefox, Zen or Chrome, or export them to plain files."
 readme = "README.md"
 license = { text = "MIT" }

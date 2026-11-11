@@ -8,7 +8,9 @@ from pathlib import Path
 from . import ToolError, __version__, arc, browsers, chrome, exporters, extensions, gecko, prefs, zen
 from .browsers import BROWSERS
 
-STEPS = ("import", "spaces", "pin-favourites", "vertical-tabs", "clean-newtab", "extensions")
+STEPS = ("import", "spaces", "pin-favourites", "vertical-tabs", "clean-newtab", "extensions", "default-browser")
+# Steps that don't change the browser profile (so they don't need it closed).
+OUTSIDE_PROFILE = ("extensions", "default-browser")
 
 # What each target can do. (level, note); level is "yes", "experimental", "built in" or "no".
 CAPABILITIES = {
@@ -42,6 +44,11 @@ CAPABILITIES = {
         "zen": ("yes", "same add-ons as Firefox; you approve each install"),
         "chrome": ("yes", "opens each extension's Web Store page; you click Add"),
     },
+    "default-browser": {
+        "firefox": ("yes", "macOS asks you to confirm"),
+        "zen": ("yes", "macOS asks you to confirm"),
+        "chrome": ("yes", "macOS asks you to confirm"),
+    },
 }
 
 STEP_LABELS = {
@@ -51,6 +58,7 @@ STEP_LABELS = {
     "vertical-tabs": "Vertical tabs",
     "clean-newtab": "New tab page cleanup",
     "extensions": "Extensions",
+    "default-browser": "Default browser",
 }
 
 MANUAL_IMPORT = {
@@ -110,7 +118,12 @@ def parse_args(argv=None):
     g.add_argument("--extensions", action="store_true",
                    help="look up your Arc extensions for the target and offer to install them "
                         "(sends extension names to addons.mozilla.org for Firefox/Zen)")
+    g.add_argument("--default-browser", action="store_true",
+                   help="make the target your default browser (macOS asks you to confirm)")
     g.add_argument("--all", action="store_true", help="every step the target browser supports")
+    g.add_argument("--remove-arc", choices=("app", "all"),
+                   help="when everything else worked, move Arc to the Trash: 'app' = just the app, "
+                        "'all' = the app and its data (asks first, even with --yes)")
     g.add_argument("--browser-profile", "--firefox-profile", dest="browser_profile", type=Path,
                    help="profile folder to change (default: the one the browser opens)")
     g.add_argument("--browser-bin", "--firefox-bin", dest="browser_bin", type=Path, help="browser executable")
@@ -140,7 +153,8 @@ def chosen_steps(args):
     if args.all:
         return list(STEPS)
     picked = {"import": args.do_import, "spaces": args.spaces, "pin-favourites": args.pin_favourites,
-              "vertical-tabs": args.vertical_tabs, "clean-newtab": args.clean_newtab, "extensions": args.extensions}
+              "vertical-tabs": args.vertical_tabs, "clean-newtab": args.clean_newtab, "extensions": args.extensions,
+              "default-browser": args.default_browser}
     return [s for s in STEPS if picked[s]]
 
 
@@ -191,16 +205,60 @@ def run(args, ask=None, log=print):
         if html_path and not args.dry_run and not getattr(args, "guided", False):
             log(f"\nTo add these to {target.label} by hand: " + MANUAL_IMPORT[target.key].format(html=html_path))
             log("Or let exit-arc do it: see --help (e.g. --import, --all).")
-        return 0
-    return move(args, export, target, steps, html_text, html_path, ask, log)
+        code = 0
+    else:
+        code = move(args, export, target, steps, html_text, html_path, ask, log)
+    if code == 0 and getattr(args, "remove_arc", None):
+        remove_arc(args, ask, log)
+    return code
+
+
+def remove_arc(args, ask, log):
+    """Move Arc (and, with 'all', its data) to the Trash. Always asks, even with --yes."""
+    app = browsers.system.app_path(browsers.ARC)
+    paths = [app] if app else []
+    if args.remove_arc == "all":
+        data = browsers.arc_data_paths()
+        if Path(args.arc_dir).expanduser() not in data:
+            data.append(Path(args.arc_dir).expanduser())
+        paths += [p for p in data if p.exists()]
+    if not paths:
+        log("\nArc: nothing to remove (Arc.app isn't in Applications).")
+        return
+    log("\nRemoving Arc. These go to the Trash, so you can put them back until you empty it:")
+    for p in paths:
+        log(f"  {p}")
+    if args.remove_arc == "all":
+        log("Arc's history, passwords and cookies were not moved to the new browser. If you want them, "
+            "keep Arc's data (remove just the app) or export them from Arc first.")
+    else:
+        log("Arc's data stays on this Mac, so the files you exported can be made again.")
+    if args.dry_run:
+        log("[dry run] Arc was not removed.")
+        return
+    if not ask("Move Arc to the Trash now?", quitting=True):
+        log("Arc was left as it is.")
+        return
+    browsers.ensure_closed(browsers.ARC, lambda q: ask(q, quitting=True), args.quit_browser, log)
+    failed = [p for p in paths if not browsers.system.trash(p)]
+    if failed:
+        log("Couldn't move these to the Trash; drag them there yourself:")
+        for p in failed:
+            log(f"  {p}")
+    else:
+        log("Arc is in the Trash.")
 
 
 def move(args, export, target, steps, html_text, html_path, ask, log):
-    log(f"\nPlan for {target.label}:")
+    guided = getattr(args, "guided", False)  # the questions already showed the plan
+    if not guided:
+        log(f"\nPlan for {target.label}:")
     todo = []
     for step in steps:
         level, note = CAPABILITIES[step][target.key]
-        if level in ("yes", "experimental"):
+        if guided:
+            todo += [step] if level in ("yes", "experimental") else []
+        elif level in ("yes", "experimental"):
             todo.append(step)
             log(f"  {STEP_LABELS[step]}: will do" + (" (experimental)" if level == "experimental" else "")
                 + (f" - {note}" if note else ""))
@@ -210,7 +268,7 @@ def move(args, export, target, steps, html_text, html_path, ask, log):
         return 0
 
     # Extensions-only runs don't need the profile at all.
-    profile_steps = [s for s in todo if s != "extensions"]
+    profile_steps = [s for s in todo if s not in OUTSIDE_PROFILE]
     profile = None
     if profile_steps:
         profile = find_profile(args, target, log)
@@ -233,7 +291,36 @@ def move(args, export, target, steps, html_text, html_path, ask, log):
                 return code
     if "extensions" in todo:
         offer_extensions(args, export, target, ask, log)
+    if "default-browser" in todo:
+        make_default(args, target, log)
     return 0
+
+
+def make_default(args, target, log, wait=60):
+    """Ask macOS to make `target` the default browser, then report what the user chose."""
+    system = browsers.system
+    bundle = system.bundle_id(target)
+    if not bundle:
+        log(f"\nDefault browser: couldn't find {target.label}'s app, so this was skipped.")
+        return
+    if (system.default_browser() or "").lower() == bundle.lower():
+        log(f"\nDefault browser: {target.label} already is.")
+        return
+    if args.dry_run:
+        log(f"\n[dry run] Would ask macOS to make {target.label} your default browser.")
+        return
+    if not system.set_default_browser(bundle):
+        log(f"\nDefault browser: macOS didn't accept the change. Set it in System Settings > Desktop & Dock > "
+            "Default web browser.")
+        return
+    log(f"\nmacOS is asking whether to make {target.label} your default browser. Choose \"Use {target.label}\".")
+    for _ in range(wait):
+        if (system.default_browser() or "").lower() == bundle.lower():
+            log(f"{target.label} is now your default browser.")
+            return
+        system.sleep(1)
+    log(f"Your default browser didn't change. You can set it later in System Settings > Desktop & Dock > "
+        "Default web browser.")
 
 
 def find_profile(args, target, log):

@@ -16,6 +16,7 @@ LABELS = {
     "vertical-tabs": "Vertical tabs",
     "clean-newtab": "New tab page",
     "extensions": "Extensions",
+    "default-browser": "Default browser",
 }
 DESCRIPTIONS = {
     ("import", "firefox"): "your Favourites and a folder per space on the bookmarks toolbar",
@@ -32,9 +33,13 @@ DESCRIPTIONS = {
     ("extensions", "zen"): "look up your extensions on addons.mozilla.org (only their names are sent), "
                            "then open install prompts you approve",
     ("extensions", "chrome"): "open each extension's Chrome Web Store page",
+    ("default-browser", "firefox"): "make Firefox your default browser (macOS asks you to confirm)",
+    ("default-browser", "zen"): "make Zen your default browser (macOS asks you to confirm)",
+    ("default-browser", "chrome"): "make Chrome your default browser (macOS asks you to confirm)",
 }
 FLAGS = {"import": "do_import", "spaces": "spaces", "pin-favourites": "pin_favourites",
-         "vertical-tabs": "vertical_tabs", "clean-newtab": "clean_newtab", "extensions": "extensions"}
+         "vertical-tabs": "vertical_tabs", "clean-newtab": "clean_newtab", "extensions": "extensions",
+         "default-browser": "default_browser"}
 
 
 class Cancelled(Exception):
@@ -149,9 +154,12 @@ def _run(base, p, log):
     keep_bookmarks = False
     if target:
         available = [s for s in cli.STEPS if cli.supported(s, target.key)]
+        bundle = browsers.system.bundle_id(target)
+        if not bundle or (browsers.system.default_browser() or "").lower() == bundle.lower():
+            available.remove("default-browser")  # already the default, or not something we can set
         steps = p.many(f"What should exit-arc set up in {target.label}?",
                        [(s, f"{LABELS[s]}: {DESCRIPTIONS[(s, target.key)]}") for s in available])
-        if [s for s in steps if s != "extensions"]:
+        if [s for s in steps if s not in cli.OUTSIDE_PROFILE]:
             try:
                 profile = cli.find_profile(args, target, lambda *_: None)
                 if "import" in steps and target.engine == "gecko":
@@ -166,17 +174,31 @@ def _run(base, p, log):
                     raise Cancelled()
                 target, steps = None, []
 
-    # 4. Where the files go
+    # 4. Remove Arc afterwards? (never part of "all of them")
+    remove = None
+    if browsers.system.app_path(browsers.ARC):
+        remove = p.menu("When it's done, should exit-arc remove Arc from this Mac? It goes to the Trash, "
+                        "so you can put it back.",
+                        [("no", "No, keep Arc"),
+                         ("app", "Remove the Arc app, keep its data (history, passwords, cookies)"),
+                         ("all", "Remove the Arc app and its data")], default="no")
+        remove = None if remove == "no" else remove
+    args.remove_arc = remove
+
+    # 5. Where the files go
     out = Path(p.text("Where should the files go?", base.out if base.out != Path.cwd() else DEFAULT_OUT))
     args.out = out.expanduser()
 
-    # 5. Check, then go
+    # 6. Check, then go
     log("\nReady to:")
     log(f"  save your sidebar as files in {args.out}")
     if steps:
         log(f"  set up in {target.label}: " + ", ".join(LABELS[s] for s in steps))
-        if [s for s in steps if s != "extensions"]:
+        if [s for s in steps if s not in cli.OUTSIDE_PROFILE]:
             log(f"  ({target.label} needs to be closed; everything changed is backed up first)")
+    if remove:
+        log("  then move " + ("the Arc app" if remove == "app" else "the Arc app and its data")
+            + " to the Trash (it asks once more first)")
     if not p.confirm("Go ahead?", default=True):
         raise Cancelled()
 

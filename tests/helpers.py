@@ -34,6 +34,31 @@ class FakeSystem(browsers.System):
     def is_installed(self, browser):
         return browser.key in self.installed
 
+    default = "org.mozilla.firefox"
+    bundles = {"firefox": "org.mozilla.firefox", "zen": "app.zen-browser.zen", "chrome": "com.google.Chrome"}
+    accept_default = True
+
+    def bundle_id(self, browser):
+        return self.bundles.get(browser.key)
+
+    def default_browser(self):
+        return self.default
+
+    def set_default_browser(self, bundle_id):
+        self.default_requests = getattr(self, "default_requests", []) + [bundle_id]
+        if self.accept_default:
+            self.default = bundle_id
+        return True
+
+    arc_app = None  # tests set a temp path to pretend Arc.app is installed
+
+    def app_path(self, browser):
+        return self.arc_app if browser.key == "arc" else None
+
+    def trash(self, path):
+        self.trashed = getattr(self, "trashed", []) + [Path(path)]
+        return True
+
     def is_running(self, browser):
         return browser.key in self.running
 
