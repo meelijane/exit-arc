@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!-- Source for site/public/og.png (the link preview image). Rebuild with: python3 site/og/build.py -->
+<html lang="en" style="color-scheme: dark">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../public/styles.css">
+  <style>
+    html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+    body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 44px;
+           background: var(--bg); color: var(--ink); }
+    .sign { font-size: 92px; margin: 0; animation: none !important; }
+    .sign-wave { animation: none !important; }
+    .tagline { font-size: 34px; text-align: center; margin: 0; max-width: 980px; line-height: 1.35; }
+    .targets { margin: 0; font-size: 28px; }
+    .targets-list li { font-size: 28px; }
+    .url { font-family: var(--mono); font-size: 26px; opacity: 0.75; margin: 0; }
+  </style>
+</head>
+<body>
+  <h1 class="sign">
+    <span class="sign-icons" aria-hidden="true">
+      <svg class="sign-arrow" viewBox="0 0 24 24" width="1em" height="1em"><path d="M4 12h13m-5-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg class="sign-runner" viewBox="0 0 24 24" width="1em" height="1em"><circle cx="15.5" cy="3.6" r="2.3" fill="currentColor"/><path d="M13.4 7.6 10.6 14m2.6-5.4 3.6 3 2.6-.6m-6.2-2.4-3.6-.4-2 2.6m3 4.2 3.4 2.6v4.4m-3.4-7-2.4 4.2-4 .6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    <span class="sign-text">exit arc</span>
+    <span class="sign-bye" aria-hidden="true">
+      <span class="sign-logo"><img src="../public/img/arc.svg" alt="" width="82" height="68"></span>
+      <span class="sign-wave">👋</span>
+    </span>
+  </h1>
+  <p class="tagline">exit-arc simply moves your stuff into your new home.<br>Once it's all in, <strong>you decide where to unpack it.</strong></p>
+  <div class="targets">
+    <ul class="targets-list">
+      <li><img src="../public/img/firefox.svg" alt="" width="24" height="24">Firefox</li>
+      <li><img src="../public/img/zen.svg" alt="" width="24" height="24">Zen</li>
+      <li><img src="../public/img/chrome.svg" alt="" width="24" height="24">Chrome</li>
+    </ul>
+  </div>
+  <p class="url">exit-arc.com</p>
+</body>
+</html>
