@@ -61,12 +61,14 @@ It asks a few questions, then does the rest:
 4. **What should it set up there?** It lists only what that browser supports. Press Enter for all
    of them, or type the numbers you want.
    This includes making it your **default browser** (macOS asks you to confirm), unless it already is.
-5. If the browser already has bookmarks of yours: **keep them or replace them?** Adding bookmarks
+5. If the browser has more than one profile: **which profile?** Each one is listed with its folder and
+   how many bookmarks it has. The default is the one the browser opens.
+6. If that profile already has bookmarks of yours: **keep them or replace them?** Adding bookmarks
    automatically replaces all of them, so the default is to keep yours and import the bookmarks
    file yourself (it shows you how).
-6. **Remove Arc when it's done?** The default is no. See [Removing Arc](#removing-arc).
-7. **Where should the files go?** The default is `~/Desktop/arc-export`.
-8. **Go ahead?** If the browser is open, it then asks before quitting it.
+7. **Remove Arc when it's done?** The default is no. See [Removing Arc](#removing-arc).
+8. **Where should the files go?** The default is `~/Desktop/arc-export`.
+9. **Go ahead?** If the browser is open, it then asks before quitting it.
 
 Nothing changes until you say yes at the end. Everything it changes in the browser is backed up first,
 into `backup-<browser>-<time>/` in the same folder as the files.
@@ -201,7 +203,7 @@ exit-arc -o ~/Desktop/arc-export --to zen --all   # everything Zen supports
 --default-browser        make the target your default browser (macOS asks you to confirm)
 --all                    every step the target supports
 --remove-arc app|all     afterwards, move Arc (app, or app + data) to the Trash; always asks
---browser-profile DIR    profile to change (default: the browser's default)
+--browser-profile NAME   profile to change, by name or folder (default: the browser's default)
 --browser-bin PATH       browser executable
 --replace-existing       let --import replace existing Firefox/Zen bookmarks
 --no-backup              don't back up files before changing them
@@ -220,9 +222,9 @@ space names get the profile's name added). Use `--arc-profile` to pick one.
 - **"… is running"**: quit the browser with Cmd+Q (closing the window isn't
   enough on macOS), or answer yes when exit-arc offers to quit it.
 - **"No … profile found"**: open the browser once, quit it, and run exit-arc again.
-- **Several Firefox installs** (e.g. Developer Edition): exit-arc uses the
-  default one and says which. Choose another with `--browser-profile`; Firefox
-  shows each profile's folder at `about:profiles`.
+- **Several profiles**: exit-arc asks which one to set up. Without the questions, it uses the one the
+  browser opens; choose another with `--browser-profile NAME` (or its folder). Firefox lists its
+  profiles at `about:profiles`.
 - **Something looks wrong**: everything exit-arc changed is in the
   `backup-<browser>-<time>/` folder. Quit the browser and copy the files back
   into the profile.

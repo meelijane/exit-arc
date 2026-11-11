@@ -125,7 +125,7 @@ def parse_args(argv=None):
                    help="when everything else worked, move Arc to the Trash: 'app' = just the app, "
                         "'all' = the app and its data (asks first, even with --yes)")
     g.add_argument("--browser-profile", "--firefox-profile", dest="browser_profile", type=Path,
-                   help="profile folder to change (default: the one the browser opens)")
+                   help="profile to change: its folder or its name (default: the one the browser opens)")
     g.add_argument("--browser-bin", "--firefox-bin", dest="browser_bin", type=Path, help="browser executable")
     g.add_argument("--replace-existing", action="store_true",
                    help="let --import replace a Firefox/Zen profile's existing bookmarks (backed up first)")
@@ -323,9 +323,23 @@ def make_default(args, target, log, wait=60):
         "Default web browser.")
 
 
+def list_profiles(target):
+    if target.engine == "chromium":
+        return chrome.list_profiles(target.data_root)
+    return gecko.list_profiles(target)
+
+
 def find_profile(args, target, log):
     if args.browser_profile:
-        return args.browser_profile.expanduser()
+        path = Path(args.browser_profile).expanduser()
+        if path.is_dir() or path.is_absolute() or "/" in str(args.browser_profile):
+            return path
+        # Not a folder: treat it as a profile name, like the ones Firefox shows at about:profiles.
+        named = [p for p in list_profiles(target) if p["name"].lower() == str(args.browser_profile).lower()]
+        if len(named) == 1:
+            return named[0]["path"]
+        have = ", ".join(p["name"] for p in list_profiles(target)) or "none"
+        raise ToolError(f"No {target.label} profile called {args.browser_profile!r}. Found: {have}")
     if target.engine == "chromium":
         return chrome.default_profile(target.data_root)
     profile, note = gecko.default_profile(target)
@@ -354,7 +368,7 @@ def preflight(args, target, profile, steps, html_path, log, ask):
     if not args.dry_run:
         # Only the default profile can belong to the running app; an explicit --browser-profile
         # is checked through its lock file instead (so you can test on a spare profile).
-        if not args.browser_profile:
+        if not args.browser_profile or getattr(args, "picked_profile", False):
             browsers.ensure_closed(target, lambda q: ask(q, quitting=True), args.quit_browser, log)
     in_use = chrome_in_use(profile) if target.engine == "chromium" else gecko.profile_in_use(profile)
     if in_use:

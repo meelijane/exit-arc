@@ -47,6 +47,19 @@ def default_profile(root):
     return root / last
 
 
+def list_profiles(root):
+    """Chrome profiles from Local State: [{"name", "path", "default"}], the last used first."""
+    root = Path(root)
+    try:
+        state = json.loads((root / "Local State").read_text(encoding="utf-8")).get("profile", {})
+    except (OSError, ValueError):
+        return []
+    last = state.get("last_used") or "Default"
+    profiles = [{"name": (info or {}).get("name") or d, "path": root / d, "default": d == last}
+                for d, info in (state.get("info_cache") or {}).items() if (root / d).is_dir()]
+    return sorted(profiles, key=lambda p: not p["default"])
+
+
 def empty_bookmarks(now):
     roots = {}
     for i, (key, (guid, name)) in enumerate(ROOT_GUIDS.items(), start=1):

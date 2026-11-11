@@ -30,6 +30,42 @@ def _js_string(s):
     return json.dumps(str(s))
 
 
+def list_profiles(browser, root=None):
+    """Every profile the browser knows about: [{"name", "path", "default"}], the default one first.
+
+    Reads profiles.ini and, for Firefox's newer profile manager, the Profile Groups database.
+    Profiles whose folder is missing are left out.
+    """
+    root = Path(root or browser.data_root)
+    ini = root / "profiles.ini"
+    found = {}
+    if ini.exists():
+        cp = configparser.ConfigParser(interpolation=None, strict=False)
+        cp.optionxform = str
+        cp.read(ini, encoding="utf-8")
+        for sec in cp.sections():
+            if sec.startswith("Profile") and cp.has_option(sec, "Path"):
+                rel = cp.get(sec, "IsRelative", fallback="1") == "1"
+                path = (root / cp.get(sec, "Path")) if rel else Path(cp.get(sec, "Path"))
+                found[str(path.resolve())] = {"name": cp.get(sec, "Name", fallback=path.name), "path": path}
+    for db_path in sorted((root / "Profile Groups").glob("*.sqlite")):
+        try:
+            db = sqlite3.connect(f"file:{db_path}?immutable=1", uri=True)
+            rows = db.execute("SELECT path, name FROM Profiles").fetchall()
+            db.close()
+        except sqlite3.Error:
+            continue
+        for rel_path, name in rows:
+            path = Path(rel_path) if os.path.isabs(rel_path) else root / rel_path
+            found[str(path.resolve())] = {"name": name or path.name, "path": path}
+    try:
+        default = str(default_profile(browser, root)[0].resolve())
+    except ToolError:
+        default = None
+    profiles = [dict(p, default=key == default) for key, p in found.items() if p["path"].is_dir()]
+    return sorted(profiles, key=lambda p: not p["default"])
+
+
 def default_profile(browser, root=None):
     """The profile Firefox opens by default: [Install...] Default=, else [Profile*] Default=1."""
     root = Path(root or browser.data_root)

@@ -161,6 +161,8 @@ def _run(base, p, log):
                        [(s, f"{LABELS[s]}: {DESCRIPTIONS[(s, target.key)]}") for s in available])
         if [s for s in steps if s not in cli.OUTSIDE_PROFILE]:
             try:
+                if not args.browser_profile:
+                    _pick_profile(p, target, args)
                 profile = cli.find_profile(args, target, lambda *_: None)
                 if "import" in steps and target.engine == "gecko":
                     _, mine = gecko.existing_bookmarks(profile)
@@ -193,7 +195,8 @@ def _run(base, p, log):
     log("\nReady to:")
     log(f"  save your sidebar as files in {args.out}")
     if steps:
-        log(f"  set up in {target.label}: " + ", ".join(LABELS[s] for s in steps))
+        where = f" (profile {args.profile_name})" if getattr(args, "profile_name", None) else ""
+        log(f"  set up in {target.label}{where}: " + ", ".join(LABELS[s] for s in steps))
         if [s for s in steps if s not in cli.OUTSIDE_PROFILE]:
             log(f"  ({target.label} needs to be closed; everything changed is backed up first)")
     if remove:
@@ -230,3 +233,27 @@ def _ask_about_bookmarks(p, target, mine, args):
                      ("replace", "Replace mine (a backup is saved first)")], default="keep")
     args.replace_existing = choice == "replace"
     return choice == "keep"
+
+
+def _pick_profile(p, target, args):
+    """When the browser has several profiles, ask which one to set up."""
+    profiles = cli.list_profiles(target)
+    if len(profiles) < 2:
+        return
+    options = []
+    for pr in profiles:
+        bits = [pr["path"].name]
+        if pr["default"]:
+            bits.append("opens by default" if target.engine == "gecko" else "last used")
+        if target.engine == "gecko":
+            try:
+                _, mine = gecko.existing_bookmarks(pr["path"])
+                bits.append(exporters.plural(mine, "bookmark") if mine else "no bookmarks")
+            except Exception:  # an unreadable profile shouldn't stop the question
+                pass
+        options.append((str(pr["path"]), f'{pr["name"]} ({", ".join(bits)})'))
+    choice = p.menu(f"{target.label} has more than one profile. Which one should exit-arc set up?",
+                    options, default=options[0][0])
+    args.browser_profile = Path(choice)
+    args.picked_profile = True  # still check that the browser is closed, like the default profile
+    args.profile_name = next(pr["name"] for pr in profiles if str(pr["path"]) == choice)
