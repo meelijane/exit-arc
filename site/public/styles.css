@@ -110,7 +110,15 @@ a:hover { text-decoration-thickness: 2px; }
   padding-left: 0.5em;
   border-left: 3px solid color-mix(in srgb, var(--sign-ink) 45%, transparent);
 }
-.sign-curve { opacity: 0.85; }
+.sign-logo {
+  display: inline-grid;
+  place-items: center;
+  width: 1.1em;
+  height: 1.1em;
+  background: #fff;
+  border-radius: 0.24em;
+}
+.sign-logo img { display: block; width: 78%; height: auto; }
 .sign-wave { font-size: 0.8em; line-height: 1; display: inline-block; transform-origin: 70% 80%; }
 
 @media (prefers-reduced-motion: no-preference) {
