@@ -30,8 +30,8 @@ the browser's own importer or a password manager.
 ## Requirements
 
 - macOS with Arc's data still on disk (`~/Library/Application Support/Arc`)
-- Homebrew, which installs Python for you. Without Homebrew: Python 3.8 or newer
-  (`python3 --version`; macOS offers to install it if it's missing)
+- Python 3.8 or newer. Macs with Homebrew already have it (`python3 --version`); otherwise
+  macOS offers to install it the first time you run `python3`.
 - The target browser, if you're moving into one. Open it once and quit it
   before using exit-arc, so it has a profile.
 
