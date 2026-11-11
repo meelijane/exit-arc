@@ -94,7 +94,8 @@ a:hover { text-decoration-thickness: 2px; }
   border: 3px solid color-mix(in srgb, var(--sign-ink) 70%, transparent);
   outline: 3px solid var(--sign);
   border-radius: 10px;
-  font-size: clamp(2.25rem, 9vw, 4rem);
+  font-size: clamp(1.4rem, 6.4vw, 3.5rem);
+  max-width: 100%;
   font-weight: 800;
   letter-spacing: 0.04em;
   line-height: 1;
@@ -102,11 +103,31 @@ a:hover { text-decoration-thickness: 2px; }
   box-shadow: 0 0 0 6px var(--bg), 0 0 40px 8px var(--sign-glow);
 }
 
-.sign-arrow { display: inline-flex; }
+.sign-text { white-space: nowrap; }
+.sign-icons, .sign-bye { display: inline-flex; align-items: center; gap: 0.2em; }
+.sign-icons svg, .sign-bye svg { display: block; }
+.sign-bye {
+  padding-left: 0.5em;
+  border-left: 3px solid color-mix(in srgb, var(--sign-ink) 45%, transparent);
+}
+.sign-curve { opacity: 0.85; }
+.sign-wave { font-size: 0.8em; line-height: 1; display: inline-block; transform-origin: 70% 80%; }
 
 @media (prefers-reduced-motion: no-preference) {
   .sign { animation: hum 4s ease-in-out infinite; }
   .sign-arrow { animation: nudge 1.8s ease-in-out infinite; }
+  .sign-runner { animation: bob 0.9s ease-in-out infinite; }
+  .sign-wave { animation: wave 2.4s ease-in-out infinite; }
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-0.04em); }
+}
+@keyframes wave {
+  0%, 60%, 100% { transform: rotate(0); }
+  10%, 30% { transform: rotate(16deg); }
+  20%, 40% { transform: rotate(-8deg); }
 }
 
 @keyframes hum {
@@ -124,12 +145,42 @@ a:hover { text-decoration-thickness: 2px; }
   margin: 0 0 1rem;
 }
 .lede a {
-  display: inline-block;
+  display: block;
+  width: fit-content;
   font-size: 0.95rem;
-  margin-left: 0.25rem;
+  line-height: 1.5;
+  margin-top: 0.5rem;
 }
 
-.intro { font-size: 1.125rem; margin: 0 0 1.5rem; }
+.intro { font-size: 1.125rem; margin: 0 0 1.25rem; }
+
+.targets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin: 0 0 1.75rem;
+}
+.targets-label { margin: 0; color: var(--muted); font-weight: 600; }
+.targets-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.targets-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.85rem 0.35rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-weight: 700;
+}
+.targets-list svg { width: 1.35em; height: 1.35em; color: var(--ink); flex: none; }
 
 .facts {
   display: flex;
