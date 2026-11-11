@@ -1,0 +1,14 @@
+{
+  "name": "exit-arc",
+  "description": "The exit-arc plugin: move your Arc sidebar into Firefox, Zen or Chrome.",
+  "owner": {
+    "name": "Milly Schmidt"
+  },
+  "plugins": [
+    {
+      "name": "exit-arc",
+      "source": "./",
+      "description": "Move your Arc sidebar into Firefox, Zen or Chrome, or save it as files."
+    }
+  ]
+}

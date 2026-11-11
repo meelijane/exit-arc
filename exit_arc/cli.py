@@ -88,6 +88,10 @@ def capability_table():
 
 
 def parse_args(argv=None):
+    return build_parser().parse_args(argv)
+
+
+def build_parser():
     p = argparse.ArgumentParser(
         prog="exit-arc",
         description="Export your Arc sidebar to files, and optionally move it into Firefox, Zen or Chrome. "
@@ -113,7 +117,7 @@ def parse_args(argv=None):
     g.add_argument("--spaces", action="store_true", help="Zen: recreate Arc spaces with their pinned tabs and folders")
     g.add_argument("--pin-favourites", action="store_true",
                    help="favourites as pinned tabs (Firefox) or Essentials (Zen)")
-    g.add_argument("--vertical-tabs", action="store_true", help="Firefox: turn on vertical tabs")
+    g.add_argument("--vertical-tabs", action="store_true", help="turn on vertical tabs (Firefox; Chrome is experimental)")
     g.add_argument("--clean-newtab", action="store_true", help="remove sponsored shortcuts and widgets from new tabs")
     g.add_argument("--extensions", action="store_true",
                    help="look up your Arc extensions for the target and offer to install them "
@@ -135,7 +139,7 @@ def parse_args(argv=None):
     g.add_argument("--quit-browser", action="store_true", help="quit the target browser without asking if it's open")
     g.add_argument("-y", "--yes", action="store_true", help="answer yes to questions (except quitting the browser)")
     g.add_argument("--timeout", type=int, default=90, help="seconds to wait for the browser (default: %(default)s)")
-    return p.parse_args(argv)
+    return p
 
 
 def make_ask(assume_yes):

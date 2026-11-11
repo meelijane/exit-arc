@@ -1,0 +1,10 @@
+{
+  "name": "exit-arc",
+  "version": "0.4.2",
+  "description": "Move someone's Arc sidebar (spaces, pinned tabs, folders, favourites, extensions) into Firefox, Zen or Chrome, or save it as files, using the exit-arc command.",
+  "author": { "name": "Milly Schmidt" },
+  "homepage": "https://github.com/meelijane/exit-arc",
+  "repository": "https://github.com/meelijane/exit-arc",
+  "license": "MIT",
+  "keywords": ["arc", "firefox", "zen", "chrome", "bookmarks", "migration"]
+}

@@ -175,6 +175,19 @@ Everything goes to the Trash, so you can put it back until you empty it. exit-ar
 (asking before it does), and it always asks once more before moving anything, even with `--yes`.
 If Arc syncs with an Arc account, your account and its synced data stay online.
 
+## Use it with Claude
+
+This repo is also a Claude Code plugin with an `exit-arc` skill. With it, you can ask Claude to "help
+me move off Arc": Claude installs exit-arc if needed, shows you what's in Arc, asks which browser and
+steps you want, and runs it. It leaves removing Arc to you.
+
+```
+/plugin marketplace add meelijane/exit-arc
+/plugin install exit-arc@exit-arc
+```
+
+The skill itself is [`skills/exit-arc/SKILL.md`](skills/exit-arc/SKILL.md).
+
 ## Running it without questions
 
 For scripts, every answer can be given as an option instead. With any option, exit-arc asks nothing
@@ -200,7 +213,7 @@ exit-arc -o ~/Desktop/arc-export --to zen --all   # everything Zen supports
 --import                 bookmarks: favourites + a folder per space
 --spaces                 Zen: real spaces with pinned tabs and folders
 --pin-favourites         pinned tabs (Firefox) / Essentials (Zen)
---vertical-tabs          Firefox: vertical tabs
+--vertical-tabs          vertical tabs (Firefox; Chrome experimental)
 --clean-newtab           Firefox/Zen: no sponsored shortcuts or widgets
 --extensions             look up extensions and offer to install them
 --default-browser        make the target your default browser (macOS asks you to confirm)
