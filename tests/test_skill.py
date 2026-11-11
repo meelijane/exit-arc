@@ -18,6 +18,11 @@ class SkillTests(unittest.TestCase):
         self.assertTrue(options)
         self.assertEqual(sorted(options - parser_options), [])
 
+    def test_pyproject_version_matches(self):
+        import re as _re
+        text = (ROOT / "pyproject.toml").read_text()
+        self.assertEqual(_re.search(r'(?m)^version = "([^"]+)"', text).group(1), __version__)
+
     def test_plugin_version_matches(self):
         plugin = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text())
         self.assertEqual(plugin["version"], __version__)

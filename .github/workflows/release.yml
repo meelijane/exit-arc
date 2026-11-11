@@ -1,0 +1,35 @@
+name: release
+
+# Push a tag like v0.4.3 (made with scripts/bump_version.py) and this publishes the GitHub
+# release with exit-arc.pyz attached. The tag's message becomes the release notes.
+# The Homebrew cask in meelijane/homebrew-tap picks up the new release on its own.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # so the annotated tag's message is available
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Tag matches the version in the code
+        run: |
+          v=$(python3 -c "import exit_arc; print(exit_arc.__version__)")
+          if [ "v$v" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME doesn't match exit_arc.__version__ ($v). Run scripts/bump_version.py first."
+            exit 1
+          fi
+      - run: make test
+      - run: make pyz && python3 dist/exit-arc.pyz --version
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/exit-arc.pyz --title "exit-arc ${GITHUB_REF_NAME#v}" --notes-from-tag --verify-tag

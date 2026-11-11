@@ -262,6 +262,20 @@ runs them on macOS and Linux (`.github/workflows/test.yml`).
 `make pyz` builds `dist/exit-arc.pyz`, the whole tool as one file you can run
 with `python3 exit-arc.pyz`.
 
+### Releasing
+
+```bash
+python3 scripts/bump_version.py 0.4.3
+git commit -am "exit-arc 0.4.3"
+git tag -a v0.4.3 -m "What changed, for the release notes"
+git push --follow-tags
+```
+
+Pushing the tag runs `.github/workflows/release.yml`: it checks the tag matches the version, runs the
+tests, builds `exit-arc.pyz` and publishes the GitHub release with the tag's message as the notes.
+The Homebrew cask in [meelijane/homebrew-tap](https://github.com/meelijane/homebrew-tap) checks for
+new releases every six hours and updates itself.
+
 ## License
 
 [MIT](LICENSE)
