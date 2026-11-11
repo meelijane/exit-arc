@@ -194,7 +194,7 @@ a:hover { text-decoration-thickness: 2px; }
   background: var(--surface);
   font-weight: 700;
 }
-.targets-list svg { width: 1.35em; height: 1.35em; color: var(--ink); flex: none; }
+.targets-list img { width: 1.35em; height: 1.35em; flex: none; }
 
 .facts {
   display: flex;
@@ -435,3 +435,9 @@ th, td { overflow-wrap: break-word; }
   max-width: 34rem;
 }
 .tagline strong { color: var(--accent); }
+
+/* Browser and Claude logos */
+.th-browser { display: inline-flex; align-items: center; gap: 0.4em; }
+.th-browser img { width: 1.2em; height: 1.2em; flex: none; }
+.h-logo { display: flex; align-items: center; gap: 0.45em; }
+.h-logo img { width: 1em; height: 1em; flex: none; }
